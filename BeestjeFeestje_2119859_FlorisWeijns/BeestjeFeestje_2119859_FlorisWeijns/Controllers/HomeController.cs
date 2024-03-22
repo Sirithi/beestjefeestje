@@ -14,7 +14,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             _logger = logger;
         }
 
-        [Authorize]
         public IActionResult Index()
         {
             return View();

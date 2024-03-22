@@ -1,24 +1,69 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BeestjeFeestje_2119859_FlorisWeijns.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public AccountController(
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(InputModel Input) 
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                var result = await _userManager.CreateAsync(user, Input.Password);
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect("/");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            return View(); 
+        }
+
         public IActionResult Login()
         {
             return View();
         }
 
-        // POST: User/Login/5
         [HttpPost]
-        public IActionResult Login(string name, string password, string returnUrl)
+        public async Task<IActionResult> Login(InputModel Input)
         {
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, false, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    return LocalRedirect("/");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return View();
+                }
+            }
             return View();
         }
-
-        /*private bool credentialsCorrect(string name, string password)
-        {
-            if()
-        }*/
     }
 }
