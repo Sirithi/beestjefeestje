@@ -2,7 +2,7 @@
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Models
 {
-    public class InputModel
+    public class RegisterInputModel
     {
         [Required]
         [EmailAddress]

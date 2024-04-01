@@ -23,7 +23,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(InputModel Input) 
+        public async Task<IActionResult> Register(RegisterInputModel Input) 
         {
             if (ModelState.IsValid)
             {

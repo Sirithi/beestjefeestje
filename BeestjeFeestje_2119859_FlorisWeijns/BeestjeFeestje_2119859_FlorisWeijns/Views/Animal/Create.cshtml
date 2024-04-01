@@ -1,0 +1,16 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
+
+<div>
+    <form action="/" method="post">
+        <label for="name">Naam</label>
+        <input id="name" type="text" name="name" value="" placeholder="Naam"/>
+        <label for="animalName">Type dier</label>
+        <input id="animalName" type="text" name="animalName" value="" placeholder="Dier"/>
+        <label for="animalType">Type dier</label>
+        <input id="animalType" type="select" name="animalType" value="" />
+        <label for="price">Prijs</label>
+        <input id="price" type="number" step="0.01" value="0.00" />
+    </form>
+</div>

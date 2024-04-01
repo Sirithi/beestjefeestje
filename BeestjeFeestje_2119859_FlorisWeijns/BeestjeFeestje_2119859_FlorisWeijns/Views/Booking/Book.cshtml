@@ -1,0 +1,27 @@
+﻿<h1>Boek een feestje</h1>
+
+<form method="post" action="Book">
+    <div id="wizard">
+        <input type="submit" class="btn btn-danger pull-right" value="Boek"></input>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#date">Datetime</a>
+            </li>
+            <li role="presentation">
+                <a href="#beestjes">Beestjes</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="date">
+                <input type ="date"/>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="beestjes">
+                <input type="number"/>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
