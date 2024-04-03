@@ -11,8 +11,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Models
         [Required]
         public DateTime Date { get; set; }
         [Required, MinLength(1)]
-        public IList<Animal> Animals { get; set; }
-
+        public ICollection<Animal> Animals { get; set; }
 
     }
 }

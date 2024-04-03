@@ -14,5 +14,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Data
         public DbSet<User> Users { get; set; }
         public DbSet<AnimalType> AnimalTypes { get; set; }
         public DbSet<Animal> Animals { get; set; }
+        public DbSet<Farm> Farms { get; set; }
     }
 }

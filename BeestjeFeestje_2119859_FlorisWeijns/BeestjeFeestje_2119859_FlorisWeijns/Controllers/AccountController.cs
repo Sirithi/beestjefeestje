@@ -1,4 +1,6 @@
-﻿using BeestjeFeestje_2119859_FlorisWeijns.Models;
+﻿using BeestjeFeestje_2119859_FlorisWeijns.Data;
+using BeestjeFeestje_2119859_FlorisWeijns.Migrations;
+using BeestjeFeestje_2119859_FlorisWeijns.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,13 +10,17 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly BeestjeFeestjeDBContext _context;
+
 
         public AccountController(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            BeestjeFeestjeDBContext beestjeFeestjeContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = beestjeFeestjeContext;
         }
 
         public IActionResult Register()
@@ -29,6 +35,9 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             {
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+                var farm = new Farm(Input.FarmName);
+                _context.Farms.Add(farm);
+                _context.SaveChanges();
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
