@@ -1,5 +1,4 @@
 ﻿using BeestjeFeestje_2119859_FlorisWeijns.Data;
-using BeestjeFeestje_2119859_FlorisWeijns.Migrations;
 using BeestjeFeestje_2119859_FlorisWeijns.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -33,9 +32,11 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
-                var result = await _userManager.CreateAsync(user, Input.Password);
                 var farm = new Farm(Input.FarmName);
+                //var user = new User { UserName = Input.Email, Email = Input.Email, FarmId = farm.Id };
+                var user = new User(Input.Email, farm.Id);
+                var result = await _userManager.CreateAsync(user, Input.Password);
+                
                 _context.Farms.Add(farm);
                 _context.SaveChanges();
                 if (result.Succeeded)

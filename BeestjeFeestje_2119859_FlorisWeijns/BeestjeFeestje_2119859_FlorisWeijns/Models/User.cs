@@ -8,6 +8,11 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Models
     {
         public int FarmId { get; set; }
 
+        public User(string Email, int farmId) : base(Email)
+        {
+            FarmId = farmId;
+        }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             throw new NotImplementedException();

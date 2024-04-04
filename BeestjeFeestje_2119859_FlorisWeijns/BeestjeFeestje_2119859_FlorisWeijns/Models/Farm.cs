@@ -15,9 +15,9 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Models
         [StringLength(50)]
         public ICollection<Animal> Animals { get; set; } = new List<Animal>();
 
-        public Farm(string farmName)
+        public Farm(string Name)
         {
-            Name = farmName;
+            this.Name = Name;
         }
     }
 }

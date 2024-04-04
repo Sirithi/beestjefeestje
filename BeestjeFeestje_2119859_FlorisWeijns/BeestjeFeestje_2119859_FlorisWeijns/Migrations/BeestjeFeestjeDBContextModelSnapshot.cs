@@ -44,12 +44,17 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
 
+                    b.Property<int?>("FarmId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FarmId");
 
                     b.ToTable("Animals");
                 });
@@ -70,7 +75,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                     b.ToTable("AnimalTypes");
                 });
 
-            modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.User", b =>
+            modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.Farm", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -78,46 +83,14 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Addage")
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("HouseNumber")
-                        .HasMaxLength(5)
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Postcode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(45)
-                        .HasColumnType("nvarchar(45)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Farms");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -184,6 +157,11 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -235,6 +213,10 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -318,6 +300,23 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.User", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<int>("FarmId")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("User");
+                });
+
+            modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.Animal", b =>
+                {
+                    b.HasOne("BeestjeFeestje_2119859_FlorisWeijns.Models.Farm", null)
+                        .WithMany("Animals")
+                        .HasForeignKey("FarmId");
+                });
+
             modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.AnimalType", b =>
                 {
                     b.HasOne("BeestjeFeestje_2119859_FlorisWeijns.Models.Animal", null)
@@ -379,6 +378,11 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
             modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.Animal", b =>
                 {
                     b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.Farm", b =>
+                {
+                    b.Navigation("Animals");
                 });
 #pragma warning restore 612, 618
         }
