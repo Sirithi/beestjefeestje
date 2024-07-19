@@ -39,7 +39,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-            return View(Input); // Correct binding bij terugkeer bij validatiefouten
+            return View(Input);
         }
 
         public IActionResult Login()

@@ -2,12 +2,15 @@
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Models
 {
-    public class InputModel
+    public class RegisterInputModel
     {
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Required, StringLength(30)]
+        public string FarmName { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
