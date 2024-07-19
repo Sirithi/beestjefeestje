@@ -23,7 +23,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(InputModel Input) 
+        public async Task<IActionResult> Register(InputModel Input)
         {
             if (ModelState.IsValid)
             {
@@ -39,7 +39,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-            return View(); 
+            return View(Input); // Correct binding bij terugkeer bij validatiefouten
         }
 
         public IActionResult Login()
