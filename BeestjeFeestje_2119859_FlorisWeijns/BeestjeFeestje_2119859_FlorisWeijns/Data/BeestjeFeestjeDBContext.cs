@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Data
 {
-    public class BeestjeFeestjeDBContext: IdentityDbContext<IdentityUser, IdentityRole, string>
+    public class BeestjeFeestjeDBContext : IdentityDbContext<User, IdentityRole, string>
     {
         public BeestjeFeestjeDBContext(DbContextOptions<BeestjeFeestjeDBContext> options) : base(options)
-        { 
-
+        {
         }
+
         public DbSet<Animal> Animals { get; set; }
         public DbSet<AnimalType> AnimalTypes { get; set; }
     }

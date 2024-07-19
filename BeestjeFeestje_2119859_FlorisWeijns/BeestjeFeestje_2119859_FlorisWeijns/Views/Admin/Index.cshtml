@@ -1,0 +1,41 @@
+﻿@model BeestjeFeestje_2119859_FlorisWeijns.Models.AdminViewModel
+@inject Microsoft.AspNetCore.Identity.UserManager<Microsoft.AspNetCore.Identity.IdentityUser> UserManager
+
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<h2>User Management</h2>
+
+@if (Model.IsAdmin)
+{
+    <p>
+        <a asp-action="CreateRole" class="btn btn-primary">Create New Role</a>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>@string.Join(", ", await UserManager.GetRolesAsync(user))</td>
+                    <td>
+                        <a asp-action="ManageRoles" asp-route-userId="@user.Id" class="btn btn-primary">Manage Roles</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>You do not have permission to view this page.</p>
+}

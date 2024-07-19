@@ -5,12 +5,15 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure services
+// Voeg services toe aan de container
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<BeestjeFeestjeDBContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => {
+
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
     options.SignIn.RequireConfirmedAccount = false;
 }).AddEntityFrameworkStores<BeestjeFeestjeDBContext>()
   .AddDefaultTokenProviders();
@@ -19,29 +22,30 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-    options.LoginPath = "/Identity/Account/Login";
-    options.LogoutPath = "/Identity/Account/Logout";
-    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
+    options.AccessDeniedPath = "/Account/AccessDenied";
     options.SlidingExpiration = true;
 });
 
 var app = builder.Build();
 
-// Seed the database with a superuser
+// Seed de database met een supergebruiker
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-    var dbContext = services.GetRequiredService<BeestjeFeestjeDBContext>();
-
-    // Zorg ervoor dat de database wordt gemigreerd en up-to-date is
-    dbContext.Database.Migrate();
-
-    // Roept de Initializer aan om de supergebruiker te seeden als deze niet bestaat
-    await DbInitializer.Initialize(services, userManager);
+    try
+    {
+        await DbInitializer.Initialize(services);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
+    }
 }
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

@@ -1,17 +1,18 @@
 ﻿using BeestjeFeestje_2119859_FlorisWeijns.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
         public AccountController(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<User> userManager,
+            SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -27,7 +28,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                var user = new User { UserName = Input.Email, Email = Input.Email, FarmId = Input.FarmId };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
@@ -48,22 +49,29 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginInputModel Input)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
                 {
-                    return LocalRedirect("/");
+                    await _signInManager.SignOutAsync();
+                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
+                    if (result.Succeeded)
+                    {
+                        if (await _userManager.IsInRoleAsync(user, "Admin"))
+                        {
+                            var adminClaim = new Claim(ClaimTypes.Role, "Admin");
+                            await _userManager.AddClaimAsync(user, adminClaim);
+                        }
+
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View();
-                }
+                ModelState.AddModelError("", "Invalid login attempt.");
             }
-            return View();
+            return View(model);
         }
 
         public async Task<IActionResult> Logout()
