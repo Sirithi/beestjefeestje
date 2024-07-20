@@ -1,5 +1,5 @@
 ﻿@model BeestjeFeestje_2119859_FlorisWeijns.Models.AdminViewModel
-@inject Microsoft.AspNetCore.Identity.UserManager<Microsoft.AspNetCore.Identity.IdentityUser> UserManager
+@inject Microsoft.AspNetCore.Identity.UserManager<User> UserManager
 
 @{
     ViewData["Title"] = "User Management";
@@ -7,7 +7,7 @@
 
 <h2>User Management</h2>
 
-@if (Model.IsAdmin)
+@if (User.IsInRole("Admin"))
 {
     <p>
         <a asp-action="CreateRole" class="btn btn-primary">Create New Role</a>

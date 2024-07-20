@@ -8,15 +8,17 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Models
     {
         public string FarmId { get; set; }
 
+
         public User() : base()
         {
         }
 
-        public User(string email, string farmId) : base()
+        public User(string email, string farmId, string phoneNumber) : base()
         {
             Email = email;
             UserName = email;
             FarmId = farmId;
+            PhoneNumber = phoneNumber;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

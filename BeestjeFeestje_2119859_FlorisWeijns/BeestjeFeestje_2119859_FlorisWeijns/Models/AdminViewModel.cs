@@ -6,6 +6,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Models
     public class AdminViewModel
     {
         public bool IsAdmin { get; set; }
-        public List<IdentityUser> Users { get; set; }
+        public List<User> Users { get; set; }
     }
 }

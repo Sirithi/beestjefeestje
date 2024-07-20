@@ -6,12 +6,19 @@
 
 <h2>Manage Roles</h2>
 
-<form asp-action="ManageRoles" method="post">
-    <input type="hidden" asp-for="UserId" />
-    <div class="form-group">
-        <label for="roles">Roles</label>
-        <select asp-for="AvailableRoles" asp-items="ViewBag.Roles" multiple class="form-control" id="roles">
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Save</button>
-</form>
+@if (User.IsInRole("Admin"))
+{
+    <form asp-action="ManageRoles" method="post">
+        <input type="hidden" asp-for="UserId" />
+        <div class="form-group">
+            <label for="roles">Roles</label>
+            <select asp-for="SelectedRoles" asp-items="@ViewBag.Roles" multiple class="form-control" id="roles">
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+}
+else
+{
+    <p>You do not have permission to view this page.</p>
+}

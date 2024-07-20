@@ -25,6 +25,12 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Models
         [Display(Name = "FarmId")]
         [DataType(DataType.Text)]
         public string FarmId { get; set; }
+
+        [Required]
+        [StringLength(10, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]
+        [Display(Name = "PhoneNumber")]
+        [DataType(DataType.PhoneNumber)]
+        public string PhoneNumber { get; set; }
         
     }
 }

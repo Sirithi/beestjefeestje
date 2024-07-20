@@ -19,6 +19,21 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Data
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
             }
 
+            if (!await roleManager.RoleExistsAsync("Silver"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Silver"));
+            }
+
+            if (!await roleManager.RoleExistsAsync("Gold"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Gold"));
+            }
+
+            if (!await roleManager.RoleExistsAsync("Platinum"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Platinum"));
+            }
+
             var superUserEmail = "superuser@example.com";
             var superUser = await userManager.FindByEmailAsync(superUserEmail);
 

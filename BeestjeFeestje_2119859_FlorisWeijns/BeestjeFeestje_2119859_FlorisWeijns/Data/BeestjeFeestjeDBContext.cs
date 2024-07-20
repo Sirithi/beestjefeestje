@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Data
 {
-    public class BeestjeFeestjeDBContext : IdentityDbContext<User, IdentityRole, string>
+    public class BeestjeFeestjeDBContext : IdentityDbContext<User>
     {
         public BeestjeFeestjeDBContext(DbContextOptions<BeestjeFeestjeDBContext> options) : base(options)
         {

@@ -13,12 +13,12 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<AdminController> _logger;
 
-        public AdminController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, ILogger<AdminController> logger)
+        public AdminController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, ILogger<AdminController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -46,7 +46,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             var model = new ManageRolesViewModel
             {
                 UserId = user.Id,
-                AvailableRoles = _roleManager.Roles.ToList()
+                SelectedRoles = []
             };
 
             ViewBag.Roles = new SelectList(_roleManager.Roles.ToList(), "Name", "Name");
@@ -55,21 +55,21 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ManageRoles(string userId, List<string> roles)
+        public async Task<IActionResult> ManageRoles(string userId, ManageRolesViewModel model)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var targetUser = await _userManager.FindByIdAsync(userId);
 
-            if (user == null)
+            if (targetUser == null)
             {
                 return NotFound();
             }
 
-            var currentRoles = await _userManager.GetRolesAsync(user);
-            var rolesToAdd = roles.Except(currentRoles);
-            var rolesToRemove = currentRoles.Except(roles);
+            var currentRoles = await _userManager.GetRolesAsync(targetUser);
+            var rolesToAdd = model.SelectedRoles.Except(currentRoles);
+            //var rolesToRemove = currentRoles.Except(model.roles);
 
-            await _userManager.AddToRolesAsync(user, rolesToAdd);
-            await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
+            await _userManager.AddToRolesAsync(targetUser, rolesToAdd);
+            //await _userManager.RemoveFromRolesAsync(targetUser, rolesToRemove);
 
             return RedirectToAction(nameof(Index));
         }

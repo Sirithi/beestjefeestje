@@ -28,7 +28,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = Input.Email, Email = Input.Email, FarmId = Input.FarmId };
+                var user = new User { UserName = Input.Email, Email = Input.Email, FarmId = Input.FarmId, PhoneNumber = Input.PhoneNumber };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
