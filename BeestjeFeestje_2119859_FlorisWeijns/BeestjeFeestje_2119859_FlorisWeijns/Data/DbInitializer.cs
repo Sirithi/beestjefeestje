@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 using BeestjeFeestje_2119859_FlorisWeijns.Models;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Data
 {
@@ -13,6 +10,8 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Data
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            using var context = new BeestjeFeestjeDBContext(
+            serviceProvider.GetRequiredService<DbContextOptions<BeestjeFeestjeDBContext>>());
 
             if (!await roleManager.RoleExistsAsync("Admin"))
             {
@@ -34,6 +33,37 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Data
                 await roleManager.CreateAsync(new IdentityRole("Platinum"));
             }
 
+            if (!await roleManager.RoleExistsAsync("Owner"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Owner"));
+            }
+
+            string superFarmId = "";
+
+            try
+            {
+                string farmName = "SuperFarm";
+                if (!await context.Farms.AnyAsync(f => f.FarmName == farmName))
+                {
+                    Farm farm = new Farm(farmName);
+                    context.Farms.Add(farm);
+                    await context.SaveChangesAsync();
+                }
+
+                Farm? dbFarm = context.Farms.FirstOrDefault(f => f.FarmName == farmName);
+                if (dbFarm == null)
+                {
+                    throw new Exception("Farm not found");
+                }
+
+                superFarmId = dbFarm.Id;
+            }
+            catch (Exception e)
+            {
+                superFarmId = "1";
+                Console.WriteLine(e.Message);
+            }
+
             var superUserEmail = "superuser@example.com";
             var superUser = await userManager.FindByEmailAsync(superUserEmail);
 
@@ -44,7 +74,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Data
                     UserName = superUserEmail,
                     Email = superUserEmail,
                     EmailConfirmed = true,
-                    FarmId = "1" // Voorbeeld FarmId
+                    FarmId = superFarmId
                 };
 
                 var result = await userManager.CreateAsync(superUser, "SuperSecretPassword123!");

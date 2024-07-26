@@ -7,24 +7,17 @@ using BeestjeFeestje_2119859_FlorisWeijns.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class AdminController : Controller
+    public class AdminController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, ILogger<AdminController> logger) : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly ILogger<AdminController> _logger;
-
-        public AdminController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, ILogger<AdminController> logger)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
-            _logger = logger;
-        }
+        private readonly UserManager<User> _userManager = userManager;
+        private readonly SignInManager<User> _signInManager = signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager = roleManager;
+        private readonly ILogger<AdminController> _logger = logger;
 
         public async Task<IActionResult> Index()
         {
@@ -36,20 +29,37 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 
         public async Task<IActionResult> ManageRoles(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var targetUser = await _userManager.FindByIdAsync(userId);
 
-            if (user == null)
+            if (targetUser == null)
             {
                 return NotFound();
             }
 
             var model = new ManageRolesViewModel
             {
-                UserId = user.Id,
-                SelectedRoles = []
+                UserId = targetUser.Id,
             };
 
-            ViewBag.Roles = new SelectList(_roleManager.Roles.ToList(), "Name", "Name");
+            var targetUserRoles = await _userManager.GetRolesAsync(targetUser);
+            var allRoles = _roleManager.Roles.ToList();
+
+            var userRoles = new List<IdentityRole>();
+
+            foreach (var role in allRoles)
+            {
+                if(await _userManager.IsInRoleAsync(targetUser, role.Name))
+                {
+                    userRoles.Add(role);
+                    model.SelectedRoles.Add(role);
+                }
+                else
+                {
+                    model.PossibleRoles.Add(role);
+                }
+            }
+
+            ViewBag.Roles = new SelectList(model.PossibleRoles, "Name", "Name");
 
             return View(model);
         }
@@ -65,7 +75,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             }
 
             var currentRoles = await _userManager.GetRolesAsync(targetUser);
-            var rolesToAdd = model.SelectedRoles.Except(currentRoles);
+            var rolesToAdd = model.SelectedRoles.Select(r => r.Name).Except(currentRoles);
             //var rolesToRemove = currentRoles.Except(model.roles);
 
             await _userManager.AddToRolesAsync(targetUser, rolesToAdd);

@@ -1,22 +1,21 @@
-﻿using BeestjeFeestje_2119859_FlorisWeijns.Models;
+﻿using BeestjeFeestje_2119859_FlorisWeijns.Data;
+using BeestjeFeestje_2119859_FlorisWeijns.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController(
+        UserManager<User> userManager,
+        SignInManager<User> signInManager,
+        BeestjeFeestjeDBContext context
+        ) : Controller
     {
-        private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
-
-        public AccountController(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-        }
+        private readonly SignInManager<User> _signInManager = signInManager;
+        private readonly UserManager<User> _userManager = userManager;
+        private readonly BeestjeFeestjeDBContext _context = context;
+        
 
         public IActionResult Register()
         {
@@ -28,7 +27,17 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = Input.Email, Email = Input.Email, FarmId = Input.FarmId, PhoneNumber = Input.PhoneNumber };
+                if(string.IsNullOrEmpty(Input.FarmName))
+                {
+                    ModelState.AddModelError(string.Empty, "Farm name is required.");
+                    return View(Input);
+                }
+
+                Farm farm = new(Input.FarmName);
+                _context.Farms.Add(farm);
+                await _context.SaveChangesAsync();
+
+                var user = new User { UserName = Input.Email, Email = Input.Email, FarmId = farm.Id, PhoneNumber = Input.PhoneNumber };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

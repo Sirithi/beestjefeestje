@@ -8,14 +8,9 @@ using Microsoft.EntityFrameworkCore;
 namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 {
     [Authorize]
-    public class AnimalController : Controller
+    public class AnimalController(BeestjeFeestjeDBContext context) : Controller
     {
-        private readonly BeestjeFeestjeDBContext _context;
-
-        public AnimalController(BeestjeFeestjeDBContext context)
-        {
-            _context = context;
-        }
+        private readonly BeestjeFeestjeDBContext _context = context;
 
         public async Task<IActionResult> Index()
         {

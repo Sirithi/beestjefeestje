@@ -21,10 +21,10 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Models
         public string ConfirmPassword { get; set; }
        
         [Required]
-        [StringLength(5, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
-        [Display(Name = "FarmId")]
+        [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
+        [Display(Name = "FarmName")]
         [DataType(DataType.Text)]
-        public string FarmId { get; set; }
+        public string FarmName { get; set; }
 
         [Required]
         [StringLength(10, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]

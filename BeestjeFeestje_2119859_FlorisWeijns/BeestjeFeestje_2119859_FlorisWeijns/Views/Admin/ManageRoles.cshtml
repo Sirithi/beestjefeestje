@@ -11,8 +11,8 @@
     <form asp-action="ManageRoles" method="post">
         <input type="hidden" asp-for="UserId" />
         <div class="form-group">
-            <label for="roles">Roles</label>
-            <select asp-for="SelectedRoles" asp-items="@ViewBag.Roles" multiple class="form-control" id="roles">
+            <label for="SelectedRoles">Roles</label>
+            <select asp-for="SelectedRoles" asp-items="@ViewBag.Roles" multiple class="form-control" id="SelectedRoles">
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
