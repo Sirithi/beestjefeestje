@@ -27,59 +27,63 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             return View(model);
         }
 
+        [HttpGet]
         public async Task<IActionResult> ManageRoles(string userId)
         {
             var targetUser = await _userManager.FindByIdAsync(userId);
+
+            
 
             if (targetUser == null)
             {
                 return NotFound();
             }
 
+            var allRoles = await _roleManager.Roles.ToListAsync();
+            var roleNames = allRoles.Select(r => r.Name);
+
+            var userRoles = await _userManager.GetRolesAsync(targetUser);
+
+            var possibleRoles = roleNames.Except(userRoles);
+
             var model = new ManageRolesViewModel
             {
-                UserId = targetUser.Id,
+                AvailableRoles = possibleRoles.ToList(),
+                UserId = userId,
+                AssignedRoles = userRoles.ToList(),
+                RolesToAdd = new List<string>(),
+                RolesToRemove = new List<string>()
             };
-
-            var targetUserRoles = await _userManager.GetRolesAsync(targetUser);
-            var allRoles = _roleManager.Roles.ToList();
-
-            var userRoles = new List<IdentityRole>();
-
-            foreach (var role in allRoles)
-            {
-                if(await _userManager.IsInRoleAsync(targetUser, role.Name))
-                {
-                    userRoles.Add(role);
-                    model.SelectedRoles.Add(role);
-                }
-                else
-                {
-                    model.PossibleRoles.Add(role);
-                }
-            }
-
-            ViewBag.Roles = new SelectList(model.PossibleRoles, "Name", "Name");
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> ManageRoles(string userId, ManageRolesViewModel model)
+        public async Task<IActionResult> UpdateUserRoles(ManageRolesViewModel model)
         {
-            var targetUser = await _userManager.FindByIdAsync(userId);
-
-            if (targetUser == null)
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            var currentRoles = await _userManager.GetRolesAsync(targetUser);
-            var rolesToAdd = model.SelectedRoles.Select(r => r.Name).Except(currentRoles);
-            //var rolesToRemove = currentRoles.Except(model.roles);
+            var userRoles = await _userManager.GetRolesAsync(user);
 
-            await _userManager.AddToRolesAsync(targetUser, rolesToAdd);
-            //await _userManager.RemoveFromRolesAsync(targetUser, rolesToRemove);
+            var rolesToAdd = model.RolesToAdd[0]?.Split(',') ?? new string[] { };
+            var rolesToRemove = model.RolesToRemove[0]?.Split(',') ?? new string[] { };
+
+            rolesToRemove = rolesToRemove.Intersect(userRoles).ToArray();
+            rolesToAdd = rolesToAdd.Except(userRoles).ToArray();
+
+            if (rolesToAdd.Any())
+            {
+                IdentityResult result = await _userManager.AddToRolesAsync(user, rolesToAdd);
+            }
+
+            if (rolesToRemove.Any())
+            {
+                IdentityResult result = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
+            }
 
             return RedirectToAction(nameof(Index));
         }

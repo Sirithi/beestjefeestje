@@ -1,24 +1,76 @@
 ﻿@model BeestjeFeestje_2119859_FlorisWeijns.Models.ManageRolesViewModel
 
-@{
-    ViewData["Title"] = "Manage Roles";
-}
-
-<h2>Manage Roles</h2>
-
-@if (User.IsInRole("Admin"))
-{
-    <form asp-action="ManageRoles" method="post">
-        <input type="hidden" asp-for="UserId" />
-        <div class="form-group">
-            <label for="SelectedRoles">Roles</label>
-            <select asp-for="SelectedRoles" asp-items="@ViewBag.Roles" multiple class="form-control" id="SelectedRoles">
-            </select>
+<div class="container">
+    <h2>Manage User Roles</h2>
+    <form id="roleForm" asp-action="UpdateUserRoles", asp-controller="Admin">
+        <input type="hidden" id="rolesToAdd" name="RolesToAdd" />
+        <input type="hidden" id="rolesToRemove" name="RolesToRemove" />
+        <div class="row">
+            <div class="col-md-5">
+                <input type="hidden" asp-for="UserId" />
+                <label>Available Roles</label>
+                <select id="availableRoles" multiple="multiple" class="form-control" size="10">
+                    @foreach (var role in Model.AvailableRoles)
+                    {
+                        <option value="@role">@role</option>
+                    }
+                </select>
+                <br />
+                <button type="button" id="btnAdd" class="btn btn-primary">Add &gt;&gt;</button>
+            </div>
+            <div class="col-md-2 text-center">
+                <br /><br />
+                <button type="button" id="btnRemove" class="btn btn-danger">&lt;&lt; Remove</button>
+            </div>
+            <div class="col-md-5">
+                <label>Assigned Roles</label>
+                <select id="assignedRoles" name="AssignedRoles" multiple="multiple" class="form-control" size="10">
+                    @foreach (var role in Model.AssignedRoles)
+                    {
+                        <option value="@role">@role</option>
+                    }
+                </select>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <br />
+        <button type="submit" class="btn btn-success">Save</button>
     </form>
-}
-else
-{
-    <p>You do not have permission to view this page.</p>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnAdd').click(function () {
+                $('#availableRoles option:selected').each(function () {
+                    $(this).appendTo('#assignedRoles');
+                });
+                updateRoles();
+            });
+
+            $('#btnRemove').click(function () {
+                $('#assignedRoles option:selected').each(function () {
+                    $(this).appendTo('#availableRoles');
+                });
+                updateRoles();
+            });
+
+            function updateRoles() {
+                var rolesToAdd = [];
+                var rolesToRemove = [];
+
+                $('#assignedRoles option').each(function () {
+                    rolesToAdd.push($(this).val());
+                });
+
+                $('#availableRoles option').each(function () {
+                    rolesToRemove.push($(this).val());
+                });
+
+                $('#rolesToAdd').val(rolesToAdd.join(','));
+                $('#rolesToRemove').val(rolesToRemove.join(','));
+            }
+
+            updateRoles();
+        });
+    </script>
 }
