@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
 {
     [DbContext(typeof(BeestjeFeestjeDBContext))]
-    [Migration("20240726131531_DBInitWithAnotherColumnChange")]
-    partial class DBInitWithAnotherColumnChange
+    [Migration("20240731144107_DbContextInit")]
+    partial class DbContextInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,26 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.AType", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("AnimalId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnimalId");
+
+                    b.ToTable("Types");
+                });
 
             modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.Animal", b =>
                 {
@@ -60,22 +80,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                     b.HasIndex("FarmId");
 
                     b.ToTable("Animals");
-                });
-
-            modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.AnimalType", b =>
-                {
-                    b.Property<string>("Type")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<int?>("AnimalId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Type");
-
-                    b.HasIndex("AnimalId");
-
-                    b.ToTable("AnimalTypes");
                 });
 
             modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.Farm", b =>
@@ -294,18 +298,18 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.AType", b =>
+                {
+                    b.HasOne("BeestjeFeestje_2119859_FlorisWeijns.Models.Animal", null)
+                        .WithMany("AnimalType")
+                        .HasForeignKey("AnimalId");
+                });
+
             modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.Animal", b =>
                 {
                     b.HasOne("BeestjeFeestje_2119859_FlorisWeijns.Models.Farm", null)
                         .WithMany("Animals")
                         .HasForeignKey("FarmId");
-                });
-
-            modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.AnimalType", b =>
-                {
-                    b.HasOne("BeestjeFeestje_2119859_FlorisWeijns.Models.Animal", null)
-                        .WithMany("Type")
-                        .HasForeignKey("AnimalId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -361,7 +365,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
 
             modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.Animal", b =>
                 {
-                    b.Navigation("Type");
+                    b.Navigation("AnimalType");
                 });
 
             modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.Farm", b =>

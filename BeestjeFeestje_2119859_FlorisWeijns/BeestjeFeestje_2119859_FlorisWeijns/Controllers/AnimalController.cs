@@ -14,18 +14,19 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Animals.Include(a => a.Type).ToListAsync());
+            return View(await _context.Animals.Include(a => a.AnimalType).ToListAsync());
         }
 
         public IActionResult Create()
         {
-            ViewBag.AnimalTypes = new SelectList(_context.AnimalTypes, "Type", "Type");
+            ViewBag.AnimalTypes = new SelectList(_context.Types, "AType", "AType");
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,AnimalName,Cost,Description,Type")] Animal animal)
+        public async Task<IActionResult> Create([Bind("Id,Name,AnimalName,Cost,Description,AType")] Animal animal)
         {
             if (ModelState.IsValid)
             {
@@ -33,7 +34,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.AnimalTypes = new SelectList(_context.AnimalTypes, "Type", "Type", animal.Type);
+            ViewBag.AnimalTypes = new SelectList(_context.Types, "AType", "AType", animal.AnimalType);
             return View(animal);
         }
 
@@ -49,7 +50,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             {
                 return NotFound();
             }
-            ViewBag.AnimalTypes = new SelectList(_context.AnimalTypes, "Type", "Type", animal.Type);
+            ViewBag.AnimalTypes = new SelectList(_context.Types, "Type", "Type", animal.AnimalType);
             return View(animal);
         }
 
@@ -82,7 +83,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.AnimalTypes = new SelectList(_context.AnimalTypes, "Type", "Type", animal.Type);
+            ViewBag.AnimalTypes = new SelectList(_context.Types, "Type", "Type", animal.AnimalType);
             return View(animal);
         }
 
@@ -94,7 +95,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             }
 
             var animal = await _context.Animals
-                .Include(a => a.Type)
+                .Include(a => a.AnimalType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (animal == null)
             {
@@ -122,7 +123,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             }
 
             var animal = await _context.Animals
-                .Include(a => a.Type)
+                .Include(a => a.AnimalType)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (animal == null)
             {

@@ -16,7 +16,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Models
         [Required, StringLength(400)]
         public string Description { get; set; }
         [Required]
-        public ICollection<AnimalType> Type { get; set; }
+        public AType AnimalType { get; set; }
         
     }
 }

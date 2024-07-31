@@ -22,6 +22,21 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.AType", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Types");
+                });
+
             modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.Animal", b =>
                 {
                     b.Property<int>("Id")
@@ -34,6 +49,10 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                         .IsRequired()
                         .HasMaxLength(31)
                         .HasColumnType("nvarchar(31)");
+
+                    b.Property<string>("AnimalTypeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Cost")
                         .HasMaxLength(20)
@@ -54,25 +73,11 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AnimalTypeId");
+
                     b.HasIndex("FarmId");
 
                     b.ToTable("Animals");
-                });
-
-            modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.AnimalType", b =>
-                {
-                    b.Property<string>("Type")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<int?>("AnimalId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Type");
-
-                    b.HasIndex("AnimalId");
-
-                    b.ToTable("AnimalTypes");
                 });
 
             modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.Farm", b =>
@@ -293,16 +298,17 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
 
             modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.Animal", b =>
                 {
+                    b.HasOne("BeestjeFeestje_2119859_FlorisWeijns.Models.AType", "AnimalType")
+                        .WithMany()
+                        .HasForeignKey("AnimalTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BeestjeFeestje_2119859_FlorisWeijns.Models.Farm", null)
                         .WithMany("Animals")
                         .HasForeignKey("FarmId");
-                });
 
-            modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.AnimalType", b =>
-                {
-                    b.HasOne("BeestjeFeestje_2119859_FlorisWeijns.Models.Animal", null)
-                        .WithMany("Type")
-                        .HasForeignKey("AnimalId");
+                    b.Navigation("AnimalType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -354,11 +360,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.Animal", b =>
-                {
-                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("BeestjeFeestje_2119859_FlorisWeijns.Models.Farm", b =>

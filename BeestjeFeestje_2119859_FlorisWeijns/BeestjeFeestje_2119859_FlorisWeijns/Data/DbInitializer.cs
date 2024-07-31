@@ -90,6 +90,30 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Data
                     await userManager.AddToRoleAsync(superUser, "Admin");
                 }
             }
+            List<AType> aTypes = new List<AType>
+            {
+                 new AType("Jungle"),
+                 new AType("Sneeuw"),
+                 new AType("Boerderij"),
+                 new AType("Woestijn"),
+                 new AType("VIP")
+            };
+
+            aTypes.ForEach(aType =>
+            {
+                if (!context.Types.Any(a => a.Name == aType.Name))
+                {
+                    context.Types.Add(aType);
+                    context.SaveChanges();
+                }
+            });
+
+            //AType jungleType = new AType("Jungle");
+            //AType snowType = new AType("Sneeuw");
+            //AType farmType = new AType("Boerderij");
+            //AType desertType = new AType("Woestijn");
+            //AType vipType = new AType("VIP");
+
         }
     }
 }

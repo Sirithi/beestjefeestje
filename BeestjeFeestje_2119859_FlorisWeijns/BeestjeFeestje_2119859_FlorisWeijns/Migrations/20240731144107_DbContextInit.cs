@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
 {
     /// <inheritdoc />
-    public partial class DBInitWithAnotherColumnChange : Migration
+    public partial class DbContextInit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -192,17 +192,18 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AnimalTypes",
+                name: "Types",
                 columns: table => new
                 {
-                    Type = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     AnimalId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AnimalTypes", x => x.Type);
+                    table.PrimaryKey("PK_Types", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AnimalTypes_Animals_AnimalId",
+                        name: "FK_Types_Animals_AnimalId",
                         column: x => x.AnimalId,
                         principalTable: "Animals",
                         principalColumn: "Id");
@@ -212,11 +213,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                 name: "IX_Animals_FarmId",
                 table: "Animals",
                 column: "FarmId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AnimalTypes_AnimalId",
-                table: "AnimalTypes",
-                column: "AnimalId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -256,14 +252,16 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Types_AnimalId",
+                table: "Types",
+                column: "AnimalId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AnimalTypes");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -280,13 +278,16 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Animals");
+                name: "Types");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Animals");
 
             migrationBuilder.DropTable(
                 name: "Farms");
