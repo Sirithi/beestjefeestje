@@ -1,18 +1,20 @@
 using BeestjeFeestje.Data.Contexts;
 using BeestjeFeestje.Data.Entities;
 using BeestjeFeestje_2119859_FlorisWeijns.Data;
-using BeestjeFeestje_2119859_FlorisWeijns.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using BeestjeFeestje.Data.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
+builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddRepositories(builder.Configuration);
+
+// Add Domain Services
+
 // Voeg services toe aan de container
 builder.Services.AddControllersWithViews();
-
-builder.Services.AddDbContext<BeestjeFeestjeDBContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
