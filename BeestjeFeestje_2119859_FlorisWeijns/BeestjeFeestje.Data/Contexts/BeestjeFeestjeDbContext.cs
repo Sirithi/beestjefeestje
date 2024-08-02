@@ -10,5 +10,6 @@ namespace BeestjeFeestje.Data.Contexts
         public DbSet<AType> Types { get; set; }
 
         public DbSet<Farm> Farms { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
     }
 }

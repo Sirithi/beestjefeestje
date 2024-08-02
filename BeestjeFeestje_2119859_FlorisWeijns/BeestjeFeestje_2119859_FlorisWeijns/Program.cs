@@ -1,3 +1,5 @@
+using BeestjeFeestje.Data.Contexts;
+using BeestjeFeestje.Data.Entities;
 using BeestjeFeestje_2119859_FlorisWeijns.Data;
 using BeestjeFeestje_2119859_FlorisWeijns.Models;
 using Microsoft.AspNetCore.Identity;

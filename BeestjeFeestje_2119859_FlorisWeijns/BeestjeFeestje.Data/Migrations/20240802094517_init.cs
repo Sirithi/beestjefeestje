@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
+namespace BeestjeFeestje.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class DbContextInit : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,6 +61,18 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Farms", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Types",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Types", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -170,6 +182,25 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Bookings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bookings_AspNetUsers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Animals",
                 columns: table => new
                 {
@@ -179,35 +210,40 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                     AnimalName = table.Column<string>(type: "nvarchar(31)", maxLength: 31, nullable: false),
                     Cost = table.Column<double>(type: "float", maxLength: 20, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: false),
+                    AnimalTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BookingId = table.Column<int>(type: "int", nullable: true),
                     FarmId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Animals", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Animals_Bookings_BookingId",
+                        column: x => x.BookingId,
+                        principalTable: "Bookings",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Animals_Farms_FarmId",
                         column: x => x.FarmId,
                         principalTable: "Farms",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Animals_Types_AnimalTypeId",
+                        column: x => x.AnimalTypeId,
+                        principalTable: "Types",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Types",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    AnimalId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Types", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Types_Animals_AnimalId",
-                        column: x => x.AnimalId,
-                        principalTable: "Animals",
-                        principalColumn: "Id");
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_Animals_AnimalTypeId",
+                table: "Animals",
+                column: "AnimalTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Animals_BookingId",
+                table: "Animals",
+                column: "BookingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Animals_FarmId",
@@ -254,14 +290,17 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Types_AnimalId",
-                table: "Types",
-                column: "AnimalId");
+                name: "IX_Bookings_CustomerId",
+                table: "Bookings",
+                column: "CustomerId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Animals");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -278,6 +317,12 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Bookings");
+
+            migrationBuilder.DropTable(
+                name: "Farms");
+
+            migrationBuilder.DropTable(
                 name: "Types");
 
             migrationBuilder.DropTable(
@@ -285,12 +330,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Animals");
-
-            migrationBuilder.DropTable(
-                name: "Farms");
         }
     }
 }

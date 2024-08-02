@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BeestjeFeestje.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Models

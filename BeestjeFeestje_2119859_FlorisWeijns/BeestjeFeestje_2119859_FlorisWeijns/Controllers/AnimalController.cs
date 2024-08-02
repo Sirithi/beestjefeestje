@@ -1,4 +1,5 @@
-﻿using BeestjeFeestje_2119859_FlorisWeijns.Data;
+﻿using BeestjeFeestje.Data.Contexts;
+using BeestjeFeestje.Data.Entities;
 using BeestjeFeestje_2119859_FlorisWeijns.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,14 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.AnimalTypes = new SelectList(_context.Types, "AType", "AType");
+            var types = context.Types.ToList();
+
+            if(types == null || types.Any() == false)
+            {
+                types = new List<AType>();
+            }
+
+            ViewBag.AnimalTypes = new SelectList(types, "AType", "AType");
 
             return View();
         }

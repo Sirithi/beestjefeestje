@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BeestjeFeestje.Data.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Models
 {

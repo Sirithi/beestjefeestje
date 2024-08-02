@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using BeestjeFeestje.Data.Entities;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 {

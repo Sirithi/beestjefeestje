@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using BeestjeFeestje_2119859_FlorisWeijns.Models;
 using Microsoft.EntityFrameworkCore;
+using BeestjeFeestje.Data.Contexts;
+using BeestjeFeestje.Data.Entities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Data
 {
