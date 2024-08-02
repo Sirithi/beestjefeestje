@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace BeestjeFeestje.Data.Repositories.Interfaces
 {
-    public interface IFarmRepository : IRepository<Farm, string>
+    public interface IAnimalRepository : IRepository<Animal, string>
     {
+
     }
 }
