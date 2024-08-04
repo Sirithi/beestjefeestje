@@ -4,6 +4,7 @@ using BeestjeFeestje.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeestjeFeestje.Data.Migrations
 {
     [DbContext(typeof(BeestjeFeestjeDBContext))]
-    partial class BeestjeFeestjeDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240804125946_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,7 +63,6 @@ namespace BeestjeFeestje.Data.Migrations
                         .HasColumnType("nvarchar(400)");
 
                     b.Property<string>("FarmId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -347,9 +349,7 @@ namespace BeestjeFeestje.Data.Migrations
 
                     b.HasOne("BeestjeFeestje.Data.Entities.Farm", null)
                         .WithMany("Animals")
-                        .HasForeignKey("FarmId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FarmId");
 
                     b.Navigation("AnimalType");
                 });

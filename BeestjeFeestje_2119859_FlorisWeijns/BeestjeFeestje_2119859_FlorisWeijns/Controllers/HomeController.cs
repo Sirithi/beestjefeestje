@@ -1,4 +1,4 @@
-using BeestjeFeestje_2119859_FlorisWeijns.Models;
+using BeestjeFeestje_2119859_FlorisWeijns.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

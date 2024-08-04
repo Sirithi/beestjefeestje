@@ -10,5 +10,6 @@ namespace BeestjeFeestje.Data.Repositories.Interfaces
 {
     public interface IFarmRepository : IRepository<Farm, string>
     {
+        Task<Farm?> FindByName(string name);
     }
 }

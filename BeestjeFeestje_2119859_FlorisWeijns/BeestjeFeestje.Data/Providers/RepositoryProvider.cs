@@ -1,6 +1,5 @@
 ﻿using BeestjeFeestje.Data.Repositories;
 using BeestjeFeestje.Data.Repositories.Interfaces;
-using BeestjeFeestje.Data.Repositories.Interfaces.Base;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;

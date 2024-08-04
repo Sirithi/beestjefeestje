@@ -1,6 +1,6 @@
 ﻿using BeestjeFeestje.Data.Contexts;
 using BeestjeFeestje.Data.Entities;
-using BeestjeFeestje_2119859_FlorisWeijns.Models;
+using BeestjeFeestje_2119859_FlorisWeijns.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

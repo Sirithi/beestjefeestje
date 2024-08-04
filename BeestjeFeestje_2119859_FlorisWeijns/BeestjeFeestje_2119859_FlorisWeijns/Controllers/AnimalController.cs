@@ -1,7 +1,10 @@
 ﻿using BeestjeFeestje.Data.Contexts;
 using BeestjeFeestje.Data.Entities;
-using BeestjeFeestje_2119859_FlorisWeijns.Models;
+using BeestjeFeestje.Domain.Models;
+using BeestjeFeestje.Domain.Services.Interfaces;
+using BeestjeFeestje_2119859_FlorisWeijns.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,105 +12,72 @@ using Microsoft.EntityFrameworkCore;
 namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 {
     [Authorize]
-    public class AnimalController(BeestjeFeestjeDBContext context) : Controller
+    public class AnimalController(BeestjeFeestjeDBContext context, IAnimalService animalService, IAnimalTypeService animalTypeService, UserManager<User> userManager) : Controller
     {
-        private readonly BeestjeFeestjeDBContext _context = context;
+        //private readonly BeestjeFeestjeDBContext _context = context;
+        private readonly IAnimalService _animalService = animalService;
+        private readonly IAnimalTypeService _animalTypeService = animalTypeService;
+        private readonly UserManager<User> _userManager = userManager;
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Animals.Include(a => a.AnimalType).ToListAsync());
+            var animals = await _animalService.GetAll();
+            
+            var viewModel = new AnimalIndexViewModel(animals);
+
+            return View(viewModel);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var types = context.Types.ToList();
+            var types = await _animalTypeService.GetAll();
 
-            if(types == null || types.Any() == false)
-            {
-                types = new List<AType>();
-            }
+            AnimalCreateViewModel model = new AnimalCreateViewModel(types);
 
-            ViewBag.AnimalTypes = new SelectList(types, "AType", "AType");
-
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,AnimalName,Cost,Description,AType")] Animal animal)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(animal);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewBag.AnimalTypes = new SelectList(_context.Types, "AType", "AType", animal.AnimalType);
-            return View(animal);
-        }
-
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var animal = await _context.Animals.FindAsync(id);
-            if (animal == null)
-            {
-                return NotFound();
-            }
-            ViewBag.AnimalTypes = new SelectList(_context.Types, "Type", "Type", animal.AnimalType);
-            return View(animal);
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,AnimalName,Cost,Description,Type")] Animal animal)
+        public async Task<IActionResult> Create(AnimalCreateViewModel model)
         {
-            if (id != animal.Id)
+            var errors = ModelState
+            .Where(x => x.Value.Errors.Count > 0)
+            .Select(x => new { x.Key, x.Value.Errors })
+            .ToArray();
+
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                return View(model);
             }
 
-            if (ModelState.IsValid)
+            var animalType = await _animalTypeService.GetById(model.SelectedAnimalType);
+
+            var animal = new AnimalModel()
             {
-                try
+                Name = model.Name,
+                AnimalName = model.AnimalName,
+                Cost = model.Cost,
+                Description = model.Description,
+                AnimalType = animalType
+            };
+
+            var userId = _userManager.GetUserId(User);
+            var user = await _userManager.FindByIdAsync(userId);
+            var farmId = user.FarmId;
+
+            try
+            {
+                var result = await _animalService.Add(animal, farmId);
+                if (result != null)
                 {
-                    _context.Update(animal);
-                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AnimalExists(animal.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
             }
-            ViewBag.AnimalTypes = new SelectList(_context.Types, "Type", "Type", animal.AnimalType);
-            return View(animal);
-        }
-
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
+            catch (Exception e)
             {
-                return NotFound();
-            }
-
-            var animal = await _context.Animals
-                .Include(a => a.AnimalType)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (animal == null)
-            {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, e.Message);
+                return View(model);
             }
 
             return View(animal);
@@ -115,35 +85,102 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var animal = await _context.Animals.FindAsync(id);
-            _context.Animals.Remove(animal);
-            await _context.SaveChangesAsync();
+            await _animalService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var animal = await _context.Animals
-                .Include(a => a.AnimalType)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (animal == null)
-            {
-                return NotFound();
-            }
+        //    var animal = await _context.Animals.FindAsync(id);
+        //    if (animal == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewBag.AnimalTypes = new SelectList(_context.Types, "Type", "Type", animal.AnimalType);
+        //    return View(animal);
+        //}
 
-            return View(animal);
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("Id,Name,AnimalName,Cost,Description,Type")] Animal animal)
+        //{
+        //    if (id != animal.Id)
+        //    {
+        //        return NotFound();
+        //    }
 
-        private bool AnimalExists(int id)
-        {
-            return _context.Animals.Any(e => e.Id == id);
-        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(animal);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!AnimalExists(animal.Id))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewBag.AnimalTypes = new SelectList(_context.Types, "Type", "Type", animal.AnimalType);
+        //    return View(animal);
+        //}
+
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var animal = await _context.Animals
+        //        .Include(a => a.AnimalType)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (animal == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(animal);
+        //}
+
+
+
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var animal = await _context.Animals
+        //        .Include(a => a.AnimalType)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (animal == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(animal);
+        //}
+
+        //private bool AnimalExists(int id)
+        //{
+        //    return _context.Animals.Any(e => e.Id == id);
+        //}
     }
 }

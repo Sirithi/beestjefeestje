@@ -10,6 +10,6 @@ namespace BeestjeFeestje.Data.Repositories.Interfaces
 {
     public interface IAnimalRepository : IRepository<Animal, string>
     {
-
+        public Task<IEnumerable<Animal>> GetAllWIthRelations();
     }
 }

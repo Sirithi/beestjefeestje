@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace BeestjeFeestje_2119859_FlorisWeijns.Models
+namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
 {
     public class Booking
     {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BeestjeFeestje.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -68,7 +68,7 @@ namespace BeestjeFeestje.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -204,24 +204,17 @@ namespace BeestjeFeestje.Data.Migrations
                 name: "Animals",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
                     AnimalName = table.Column<string>(type: "nvarchar(31)", maxLength: 31, nullable: false),
                     Cost = table.Column<double>(type: "float", maxLength: 20, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: false),
                     AnimalTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BookingId = table.Column<int>(type: "int", nullable: true),
                     FarmId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Animals", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Animals_Bookings_BookingId",
-                        column: x => x.BookingId,
-                        principalTable: "Bookings",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Animals_Farms_FarmId",
                         column: x => x.FarmId,
@@ -235,15 +228,45 @@ namespace BeestjeFeestje.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AnimalBookings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AnimalId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    BookingId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnimalBookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AnimalBookings_Animals_AnimalId",
+                        column: x => x.AnimalId,
+                        principalTable: "Animals",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AnimalBookings_Bookings_BookingId",
+                        column: x => x.BookingId,
+                        principalTable: "Bookings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AnimalBookings_AnimalId",
+                table: "AnimalBookings",
+                column: "AnimalId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AnimalBookings_BookingId",
+                table: "AnimalBookings",
+                column: "BookingId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Animals_AnimalTypeId",
                 table: "Animals",
                 column: "AnimalTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Animals_BookingId",
-                table: "Animals",
-                column: "BookingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Animals_FarmId",
@@ -299,7 +322,7 @@ namespace BeestjeFeestje.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Animals");
+                name: "AnimalBookings");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -317,16 +340,19 @@ namespace BeestjeFeestje.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Animals");
+
+            migrationBuilder.DropTable(
                 name: "Bookings");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Farms");
 
             migrationBuilder.DropTable(
                 name: "Types");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

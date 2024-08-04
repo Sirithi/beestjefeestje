@@ -3,6 +3,7 @@ using BeestjeFeestje.Data.Entities;
 using BeestjeFeestje_2119859_FlorisWeijns.Data;
 using Microsoft.AspNetCore.Identity;
 using BeestjeFeestje.Data.Providers;
+using BeestjeFeestje.Domain.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddRepositories(builder.Configuration);
-
-// Add Domain Services
+builder.Services.AddServices(builder.Configuration);
 
 // Voeg services toe aan de container
 builder.Services.AddControllersWithViews();

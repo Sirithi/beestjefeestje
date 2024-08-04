@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeestjeFeestje.Data.Migrations
 {
     [DbContext(typeof(BeestjeFeestjeDBContext))]
-    [Migration("20240802094517_init")]
-    partial class init
+    [Migration("20240804132436_Farm Update")]
+    partial class FarmUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,8 +32,7 @@ namespace BeestjeFeestje.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -42,11 +41,8 @@ namespace BeestjeFeestje.Data.Migrations
 
             modelBuilder.Entity("BeestjeFeestje.Data.Entities.Animal", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AnimalName")
                         .IsRequired()
@@ -56,9 +52,6 @@ namespace BeestjeFeestje.Data.Migrations
                     b.Property<string>("AnimalTypeId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("BookingId")
-                        .HasColumnType("int");
 
                     b.Property<double>("Cost")
                         .HasMaxLength(20)
@@ -70,6 +63,7 @@ namespace BeestjeFeestje.Data.Migrations
                         .HasColumnType("nvarchar(400)");
 
                     b.Property<string>("FarmId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -81,11 +75,32 @@ namespace BeestjeFeestje.Data.Migrations
 
                     b.HasIndex("AnimalTypeId");
 
-                    b.HasIndex("BookingId");
-
                     b.HasIndex("FarmId");
 
                     b.ToTable("Animals");
+                });
+
+            modelBuilder.Entity("BeestjeFeestje.Data.Entities.AnimalBooking", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AnimalId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("BookingId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnimalId");
+
+                    b.HasIndex("BookingId");
+
+                    b.ToTable("AnimalBookings");
                 });
 
             modelBuilder.Entity("BeestjeFeestje.Data.Entities.Booking", b =>
@@ -333,15 +348,32 @@ namespace BeestjeFeestje.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BeestjeFeestje.Data.Entities.Booking", null)
+                    b.HasOne("BeestjeFeestje.Data.Entities.Farm", "Farm")
                         .WithMany("Animals")
-                        .HasForeignKey("BookingId");
-
-                    b.HasOne("BeestjeFeestje.Data.Entities.Farm", null)
-                        .WithMany("Animals")
-                        .HasForeignKey("FarmId");
+                        .HasForeignKey("FarmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AnimalType");
+
+                    b.Navigation("Farm");
+                });
+
+            modelBuilder.Entity("BeestjeFeestje.Data.Entities.AnimalBooking", b =>
+                {
+                    b.HasOne("BeestjeFeestje.Data.Entities.Animal", "Animal")
+                        .WithMany()
+                        .HasForeignKey("AnimalId");
+
+                    b.HasOne("BeestjeFeestje.Data.Entities.Booking", "Booking")
+                        .WithMany()
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Animal");
+
+                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("BeestjeFeestje.Data.Entities.Booking", b =>
@@ -402,11 +434,6 @@ namespace BeestjeFeestje.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("BeestjeFeestje.Data.Entities.Booking", b =>
-                {
-                    b.Navigation("Animals");
                 });
 
             modelBuilder.Entity("BeestjeFeestje.Data.Entities.Farm", b =>

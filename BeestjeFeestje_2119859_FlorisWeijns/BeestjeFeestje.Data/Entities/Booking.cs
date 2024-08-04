@@ -15,8 +15,5 @@ namespace BeestjeFeestje.Data.Entities
         public User Customer { get; set; }
         [Required]
         public DateTime Date { get; set; }
-        [Required, MinLength(1)]
-        public ICollection<Animal> Animals { get; set; }
-
     }
 }

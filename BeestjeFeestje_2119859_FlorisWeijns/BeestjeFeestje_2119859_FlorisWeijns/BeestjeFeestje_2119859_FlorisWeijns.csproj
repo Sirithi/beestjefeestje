@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BeestjeFeestje.Data\BeestjeFeestje.Data.csproj" />
+    <ProjectReference Include="..\BeestjeFeestje.Domain\BeestjeFeestje.Domain.csproj" />
   </ItemGroup>
 
 </Project>
