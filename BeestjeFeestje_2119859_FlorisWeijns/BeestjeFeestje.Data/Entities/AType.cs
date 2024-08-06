@@ -4,6 +4,10 @@ namespace BeestjeFeestje.Data.Entities
 {
     public class AType
     {
+        public AType()
+        {
+        }
+
         public string Id { get; set; }
         public string Name { get; set; }
 

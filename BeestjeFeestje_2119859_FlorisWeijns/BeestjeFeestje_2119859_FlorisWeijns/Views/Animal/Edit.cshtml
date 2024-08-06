@@ -1,4 +1,4 @@
-﻿@model BeestjeFeestje.Data.Entities.Animal
+﻿@model AnimalUpdateViewModel
 
 @{
     ViewData["Title"] = "Edit Animal";
@@ -6,8 +6,9 @@
 
 <h2>Edit Animal</h2>
 
-<form asp-action="Edit">
+<form asp-action="Update">
     <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="FarmId" />
     <div class="form-group">
         <label asp-for="Name"></label>
         <input asp-for="Name" class="form-control" />
@@ -21,7 +22,7 @@
     <div class="form-group">
         <label asp-for="Cost"></label>
         <input asp-for="Cost" class="form-control" />
-        <span asp-validation-for="Cost" class="text-danger"></span>
+        <span asp-validation-for="@Model.Cost" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="Description"></label>
@@ -29,9 +30,9 @@
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="AnimalType"></label>
-        <select asp-for="AnimalType" class="form-control" asp-items="ViewBag.AnimalTypes"></select>
-        <span asp-validation-for="AnimalType" class="text-danger"></span>
+        <label asp-for="SelectedAnimalType"></label>
+        <select asp-for="SelectedAnimalType" class="form-control" asp-items="@Model.ATypesList"></select>
+        <span asp-validation-for="SelectedAnimalType" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
 </form>

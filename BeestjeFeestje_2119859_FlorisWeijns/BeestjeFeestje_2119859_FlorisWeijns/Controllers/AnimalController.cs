@@ -91,6 +91,38 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Edit(string id)
+        {
+            var animal = await _animalService.Get(id);
+            var types = await _animalTypeService.GetAll();
+
+            AnimalUpdateViewModel model = new AnimalUpdateViewModel(animal, types);
+
+            return View(model);
+        }   
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(AnimalUpdateViewModel model)
+        {
+            var animalType = await _animalTypeService.GetById(model.SelectedAnimalType);
+
+            var animal = new AnimalModel()
+            {
+                Id = model.Id,
+                Name = model.Name,
+                AnimalName = model.AnimalName,
+                Cost = model.Cost,
+                Description = model.Description,
+                AnimalType = animalType,
+                FarmId = model.FarmId
+            };
+
+            await _animalService.Update(animal);
+            return RedirectToAction(nameof(Index));
+        }
+
+
         //public async Task<IActionResult> Edit(int? id)
         //{
         //    if (id == null)

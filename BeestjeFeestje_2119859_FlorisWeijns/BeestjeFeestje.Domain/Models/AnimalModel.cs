@@ -20,7 +20,7 @@ namespace BeestjeFeestje.Domain.Models
         [Required, StringLength(31)]
         [Display(Name = "Animal Type")]
         public string AnimalName { get; set; }
-        [Required, MaxLength(20)]
+        [Required, Range(0,20)]
         [Display(Name = "Cost")]
         public double Cost { get; set; }
         [Required, StringLength(400)]
@@ -29,5 +29,7 @@ namespace BeestjeFeestje.Domain.Models
         [Required]
         [Display(Name = "Animal Habitat")]
         public ATypeModel AnimalType { get; set; }
+        [Required]
+        public string FarmId { get; set; }
     }
 }

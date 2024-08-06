@@ -13,5 +13,6 @@ namespace BeestjeFeestje.Domain.Services.Interfaces
         Task<AnimalModel> Add(AnimalModel animal, string farmId);
         Task<IEnumerable<AnimalModel>> GetAll();
         Task<bool> Delete(string id);
+        Task<AnimalModel> Update(AnimalModel animal);
     }
 }

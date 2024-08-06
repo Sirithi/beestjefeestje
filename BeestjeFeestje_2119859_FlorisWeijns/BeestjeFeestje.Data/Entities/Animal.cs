@@ -17,7 +17,7 @@ namespace BeestjeFeestje.Data.Entities
         public string Name { get; set; }
         [Required, StringLength(31)]
         public string AnimalName { get; set; }
-        [Required, MaxLength(20)]
+        [Required, Range(0, 20)]
         public double Cost { get; set; }
         [Required, StringLength(400)]
         public string Description { get; set; }

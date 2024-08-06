@@ -61,13 +61,29 @@ namespace BeestjeFeestje.Domain.Services
 
         public async Task<AnimalModel> Get(string id)
         {
-            throw new NotImplementedException();
+            var animal = await _animalRepostiory.GetWithRelations(id);
+            return _mapper.Map<AnimalModel>(animal);
         }
 
         public async Task<IEnumerable<AnimalModel>> GetAll()
         {
             var result = await _animalRepostiory.GetAllWIthRelations();
             return _mapper.Map<IEnumerable<AnimalModel>>(result);
+        }
+
+        public async Task<AnimalModel> Update(AnimalModel animal)
+        {
+            var animalEntity = await _animalRepostiory.GetWithRelations(animal.Id);
+
+            var animalType = await _aTypeRepository.Get(animal.AnimalType.Id).AsTask();
+            animalEntity.AnimalType = animalType; 
+            animalEntity.Name = animal.Name;
+            animalEntity.AnimalName = animal.AnimalName;
+            animalEntity.Description = animal.Description;
+            animalEntity.Cost = animal.Cost;
+            await _animalRepostiory.Update(animalEntity);
+            var updated_animal = await _animalRepostiory.GetWithRelations(animal.Id);
+            return _mapper.Map<AnimalModel>(updated_animal);
         }
     }
 }
