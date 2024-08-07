@@ -1,0 +1,28 @@
+﻿@model BookingCreateViewModelTwo
+
+<h1>Boek een Beestje</h1>
+
+<div class="d-inline-flex">
+    <form asp-action="BookThree" method="post" >
+        <input type="hidden" asp-for="Date" />
+        <input type="hidden" asp-for="Animals"/>
+        <input type="submit" class="btn btn-primary" value="Boek" />
+        <div class="d-inline-flex flex-row justify-content-center flex-wrap">
+            <select asp-for="SelectedAnimals" asp-items="@Model.Animals" multiple>
+                <option disabled>Kies een beestje</option>
+            </select>
+        </div>
+    </form>
+
+    <div>
+        <h3>Order Info</h3>
+        <p>Selected Date: @Model.Date</p>
+        <p>Selected Animals:</p>
+    </div>
+</div>
+
+
+
+<script>
+    
+</script>

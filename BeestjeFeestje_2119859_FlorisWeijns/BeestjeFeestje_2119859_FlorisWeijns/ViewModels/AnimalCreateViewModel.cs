@@ -21,6 +21,8 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
         public SelectList? ATypesList { get; set; }
         [Required]
         public string SelectedAnimalType { get; set; }
+        [Required]
+        public string ImageUrl { get; set; }
 
         public AnimalCreateViewModel(IEnumerable<ATypeModel> aTypes)
         {

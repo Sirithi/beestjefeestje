@@ -81,6 +81,7 @@ namespace BeestjeFeestje.Domain.Services
             animalEntity.AnimalName = animal.AnimalName;
             animalEntity.Description = animal.Description;
             animalEntity.Cost = animal.Cost;
+            animalEntity.ImageUrl = animal.ImageUrl;
             await _animalRepostiory.Update(animalEntity);
             var updated_animal = await _animalRepostiory.GetWithRelations(animal.Id);
             return _mapper.Map<AnimalModel>(updated_animal);

@@ -1,22 +1,24 @@
-﻿<h1>Boek een feestje</h1>
+﻿@model BookingCreateViewModelOne
 
-<form method="post" action="Book">
+<h1>Boek een beestje</h1>
+
+<form method="post" asp-action="BookTwo">
     <div id="wizard">
-        <input type="submit" class="btn btn-danger pull-right" value="Boek"></input>
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-                <a href="#date">Datetime</a>
-            </li>
-            <li role="presentation">
-                <a href="#beestjes">Beestjes</a>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Animals" />
+        <input type="hidden" asp-for="SelectedAnimals" />
+        <input type="hidden" asp-for="Name" />
+        <input type="hidden" asp-for="Email" />
+        <input type="hidden" asp-for="PhoneNumber" />
+        <input type="submit" class="btn btn-primary pull-right" value="Boek"></input>
+        <ul>
+            <li>
+                <a>Kies een datum</a>
             </li>
         </ul>
         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="date">
-                <input type ="date"/>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="beestjes">
-                <input type="number"/>
+            <div id="date">
+                <input type ="date" asp-for="Date"/>
             </div>
         </div>
     </div>

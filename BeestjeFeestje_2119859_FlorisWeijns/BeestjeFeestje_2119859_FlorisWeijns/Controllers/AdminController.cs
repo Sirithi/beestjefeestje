@@ -59,7 +59,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateUserRoles(ManageRolesViewModel model)
         {
             var user = await _userManager.FindByIdAsync(model.UserId);
@@ -94,7 +94,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateRole(string roleName)
         {
             if (!string.IsNullOrEmpty(roleName))

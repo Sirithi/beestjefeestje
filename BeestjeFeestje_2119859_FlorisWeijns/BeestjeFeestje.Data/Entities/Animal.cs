@@ -11,6 +11,8 @@ namespace BeestjeFeestje.Data.Entities
     [PrimaryKey("Id")]
     public class Animal
     {
+        public Animal () { }
+
         [Key]
         public string Id { get; set; }
         [Required, StringLength(60)]
@@ -25,6 +27,19 @@ namespace BeestjeFeestje.Data.Entities
         public AType AnimalType { get; set; }
         [Required]
         public string FarmId { get; set; }
+        [Required]
+        public string ImageUrl { get; set; }
 
+        public Animal(string name, string animalName, double cost, string description, AType aType, string farmId, string imageUrl)
+        {
+            Id = Guid.NewGuid().ToString();
+            Name = name;
+            AnimalName = animalName;
+            Cost = cost;
+            Description = description;
+            AnimalType = aType;
+            FarmId = farmId;
+            ImageUrl = imageUrl;
+        }
     }
 }

@@ -24,6 +24,8 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
         public string SelectedAnimalType { get; set; }
         [Required]
         public string FarmId { get; set; }
+        [Required]
+        public string ImageUrl { get; set; }
 
         public AnimalUpdateViewModel(IEnumerable<ATypeModel> aTypes)
         {
