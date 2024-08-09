@@ -11,6 +11,8 @@ namespace BeestjeFeestje.Data.Repositories.Interfaces
     public interface IAnimalRepository : IRepository<Animal, string>
     {
         public Task<IEnumerable<Animal>> GetAllWIthRelations();
+        public Task<Animal> GetByName(string name);
         public Task<Animal> GetWithRelations(string id);
+        public Task<IEnumerable<Animal>> GetByNames(IEnumerable<string> names);
     }
 }

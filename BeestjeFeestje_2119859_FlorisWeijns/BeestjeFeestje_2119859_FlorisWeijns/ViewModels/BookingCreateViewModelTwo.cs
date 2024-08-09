@@ -1,20 +1,26 @@
 ﻿using BeestjeFeestje.Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
 {
-    public class BookingCreateViewModelTwo
+    public class BookingCreateViewModelThree
     {
-        public BookingCreateViewModelTwo()
+        public BookingCreateViewModelThree()
         {
         }
 
-        public BookingCreateViewModelTwo(BookingCreateViewModelOne modelOne)
+        public BookingCreateViewModelThree(BookingCreateViewModelTwo modelTwo)
         {
-            Date = modelOne.Date;
-            SelectedAnimals = modelOne.SelectedAnimals;
-            Animals = modelOne.Animals;
+            Id = modelTwo.Id;
+            Date = modelTwo.Date;
+            SelectedAnimalNames = modelTwo.SelectedAnimalNames;
+            Animals = modelTwo.Animals;
+            SelectedAnimalNames = modelTwo.SelectedAnimalNames;
+            SelectedAnimals = modelTwo.SelectedAnimals;
+            AnimalList = modelTwo.AnimalList;
+            User = modelTwo.User;
         }
         public string Id { get; set; }
         public string? Name { get; set; }
@@ -24,9 +30,11 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
         public string? PostalCode { get; set; }
         [Required]
         public DateTime Date { get; set; }
+        public MultiSelectList? Animals { get;  set; }
         [Required]
-        public MultiSelectList Animals { get;  set; }
-        [Required]
-        public IEnumerable<AnimalModel> SelectedAnimals { get; set; }
+        public IEnumerable<string> SelectedAnimalNames { get; set; }
+        public IEnumerable<AnimalModel>? SelectedAnimals { get; set; }
+        public IEnumerable<AnimalModel>? AnimalList { get; set; }
+        public IdentityUser? User { get; set; }
     }
 }

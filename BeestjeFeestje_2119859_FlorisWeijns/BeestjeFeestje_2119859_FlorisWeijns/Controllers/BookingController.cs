@@ -1,6 +1,8 @@
-﻿using BeestjeFeestje.Domain.Models;
+﻿using BeestjeFeestje.Data.Entities;
+using BeestjeFeestje.Domain.Models;
 using BeestjeFeestje.Domain.Services.Interfaces;
 using BeestjeFeestje_2119859_FlorisWeijns.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -9,10 +11,14 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
     public class BookingController : Controller
     {
         private readonly IAnimalService _animalService;
+        private readonly IBookingService _bookingService;
+        private readonly UserManager<User> _userManager;
 
-        public BookingController(IAnimalService animalService)
+        public BookingController(IAnimalService animalService, IBookingService bookingService, UserManager<User> userManager)
         {
             _animalService = animalService;
+            _bookingService = bookingService;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -22,8 +28,14 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             return View(bookings);
         }
 
-        public IActionResult Book() {
+        public async Task<IActionResult> Book()
+        {
             var model = new BookingCreateViewModelOne();
+            var user = await _userManager.GetUserAsync(User);
+            if(user != null)
+            {
+                model.User = user;
+            }
             model.Date = DateTime.Now;
             model.Id = Guid.NewGuid().ToString();
             return View(model);
@@ -38,25 +50,32 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 return RedirectToAction("Book", modelOne);
             }
             var model = new BookingCreateViewModelTwo(modelOne);
-            var animals = await _animalService.GetAll();
-            model.Animals = new MultiSelectList(
-                animals.Select(e => e.Name),
-                model.SelectedAnimals);
+            if(model.AnimalList == null)
+            {
+                model.AnimalList = await _animalService.GetAll();
+            }
+            if (model.Animals == null)
+            {
+                model.Animals = new MultiSelectList(
+                model.AnimalList.Select(e => e.Name),
+                model.SelectedAnimalNames);
+            }
+
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> BookThree(BookingCreateViewModelTwo modelTwo)
         {
-            Console.WriteLine("Premodelstate");
             if (!ModelState.IsValid)
             {
-                Console.WriteLine("Modelstate");
                 var modelOne = new BookingCreateViewModelOne(modelTwo);
                 return RedirectToAction("BookTwo", modelOne);
             }
-            Console.WriteLine("PostModelState");
-            return RedirectToAction("Index");
+
+            var model = new BookingCreateViewModelThree(modelTwo);
+            model.SelectedAnimals = await _animalService.GetByNames(modelTwo.SelectedAnimalNames);
+            return View(model);
         }
 
         [HttpPost]
@@ -64,10 +83,20 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                if (model.Animals == null)
+                {
+                    var animals = await _animalService.GetAll();
+                    model.Animals = new MultiSelectList(
+                        animals.Select(e => e.Name),
+                        model.SelectedAnimalNames);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
             }
 
             return RedirectToAction("Index");
-        }   
+        }
     }
 }

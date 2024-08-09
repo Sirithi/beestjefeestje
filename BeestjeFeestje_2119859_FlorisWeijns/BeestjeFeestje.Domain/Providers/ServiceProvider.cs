@@ -14,6 +14,7 @@ namespace BeestjeFeestje.Domain.Providers
 
             services.AddScoped<IAnimalService, AnimalService>();
             services.AddScoped<IAnimalTypeService, AnimalTypeService>();
+            services.AddScoped<IBookingService, BookingService>();
            
             return services;
         }

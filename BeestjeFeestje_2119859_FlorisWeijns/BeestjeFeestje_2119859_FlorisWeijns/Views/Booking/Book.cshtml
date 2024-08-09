@@ -6,10 +6,11 @@
     <div id="wizard">
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="Animals" />
-        <input type="hidden" asp-for="SelectedAnimals" />
+        <input type="hidden" asp-for="SelectedAnimalNames" />
         <input type="hidden" asp-for="Name" />
         <input type="hidden" asp-for="Email" />
         <input type="hidden" asp-for="PhoneNumber" />
+        <input type="hidden" asp-for="User" />
         <input type="submit" class="btn btn-primary pull-right" value="Boek"></input>
         <ul>
             <li>
@@ -21,6 +22,26 @@
                 <input type ="date" asp-for="Date"/>
             </div>
         </div>
+        @if(Model.User == null)
+        {
+            <div>
+                <div class="form-group">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+        }
     </div>
 </form>
 

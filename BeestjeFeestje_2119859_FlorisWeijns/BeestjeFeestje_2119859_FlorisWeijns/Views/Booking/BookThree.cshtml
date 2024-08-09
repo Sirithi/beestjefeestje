@@ -1,0 +1,32 @@
+﻿@model BookingCreateViewModelThree
+
+<h1>Boek een Beestje</h1>
+
+<div class="d-inline-flex">
+    <form asp-action="BookThree" method="post">
+        <input type="hidden" asp-for="Date" />
+        <input type="hidden" asp-for="Animals" />
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="SelectedAnimalNames" />
+        <input type="hidden" asp-for="User" />
+
+        <input type="submit" class="btn btn-primary" value="Boek" />
+    </form>
+
+    <div>
+        <h3>Boeking Info</h3>
+        <p>Geselecteerde Datum: @Model.Date</p>
+        <p>Geselecteerde Beestjes:</p>
+        <div class="d-inline-flex flex-row justify-content-center flex-wrap">
+            @foreach (var animal in Model.SelectedAnimals)
+            {
+                <div class="card m-2" style="width: 18rem;">
+                    <p><span>Naam: </span>@animal.Name</p>
+                    <img src="@animal.ImageUrl" />
+                    <p><span>Cost: </span>@animal.Cost</p>
+                </div>
+            }
+        </div>
+        
+    </div>
+</div>

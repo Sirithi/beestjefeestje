@@ -132,7 +132,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Data
                 new Animal("Otis", "Koe", 4.8, "Een koe van de boerderij", farmType, superFarmId, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxh6FRUA2OHUJQ7InKst3dpJiDq2KrkbWwjQ&s"),
                 new Animal("Duke", "Eend", 3.5, "Een eend van de boerderij", farmType, superFarmId, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxh6FRUA2OHUJQ7InKst3dpJiDq2KrkbWwjQ&s"),
                 new Animal("Duckling", "Kuiken", 3.7, "Een kuiken van de boerderij", farmType, superFarmId, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxh6FRUA2OHUJQ7InKst3dpJiDq2KrkbWwjQ&s"),
-                new Animal("Skipper", "Penguin", 4.6, "Een penguin uit de sneeuw", snowType, superFarmId, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxh6FRUA2OHUJQ7InKst3dpJiDq2KrkbWwjQ&s"),
+                new Animal("Skipper", "Penguin", 4.6, "Een penguin uit de sneeuw", snowType, superFarmId, "https://cdn.pixabay.com/photo/2014/04/02/11/13/penguin-305574_640.png"),
                 new Animal("Desmond", "Ijsbeer", 7.8, "Een ijsbeer uit de sneeuw", snowType, superFarmId, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxh6FRUA2OHUJQ7InKst3dpJiDq2KrkbWwjQ&s"),
                 new Animal("Pieter", "Zeehond", 6.7, "Een zeehond uit de sneeuw", snowType, superFarmId, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxh6FRUA2OHUJQ7InKst3dpJiDq2KrkbWwjQ&s"),
                 new Animal("Juistja", "Kameel", 6.3, "Een kameel uit de woestijn", desertType, superFarmId, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxh6FRUA2OHUJQ7InKst3dpJiDq2KrkbWwjQ&s"),

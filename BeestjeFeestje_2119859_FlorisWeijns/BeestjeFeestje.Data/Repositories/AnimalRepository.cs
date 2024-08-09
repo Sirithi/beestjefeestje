@@ -21,6 +21,21 @@ namespace BeestjeFeestje.Data.Repositories
             return await GetQuery().Include(a => a.AnimalType).ToListAsync();
         }
 
+        public async Task<Animal> GetByName(string name)
+        {
+            var result = GetQuery().Where(a => a.Name == name).FirstOrDefault();
+            if (result == null)
+            {
+                throw new KeyNotFoundException();
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<Animal>> GetByNames(IEnumerable<string> names)
+        {
+            return await GetQuery().Where(a => names.Contains(a.Name)).ToListAsync();
+        }
+
         public async Task<Animal> GetWithRelations(string id)
         {
             var animal = await GetQuery().Include(a => a.AnimalType).Where(a => a.Id == id).FirstOrDefaultAsync();

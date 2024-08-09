@@ -18,6 +18,7 @@ namespace BeestjeFeestje.Data.Providers
             services.AddScoped<IAnimalRepository, AnimalRepository>();
             services.AddScoped<IFarmRepository, FarmRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IBookingRepository, BookingRepository>();
 
             return services;
         }

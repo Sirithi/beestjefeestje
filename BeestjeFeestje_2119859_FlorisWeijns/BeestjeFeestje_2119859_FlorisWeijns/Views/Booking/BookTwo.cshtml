@@ -6,10 +6,13 @@
     <form asp-action="BookThree" method="post" >
         <input type="hidden" asp-for="Date" />
         <input type="hidden" asp-for="Animals"/>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="User" />
+
         <input type="submit" class="btn btn-primary" value="Boek" />
-        <div class="d-inline-flex flex-row justify-content-center flex-wrap">
-            <select asp-for="SelectedAnimals" asp-items="@Model.Animals" multiple>
-                <option disabled>Kies een beestje</option>
+        <div class="">
+            <label asp-for="SelectedAnimalNames">Selecteer de dieren die je wilt boeken:</label>
+            <select asp-for="SelectedAnimalNames" asp-items="@Model.Animals" multiple>
             </select>
         </div>
     </form>
@@ -20,9 +23,19 @@
         <p>Selected Animals:</p>
     </div>
 </div>
-
-
-
-<script>
-    
-</script>
+<div class="d-inline-flex flex-row justify-content-center flex-wrap">
+    @foreach (var animal in Model.AnimalList)
+    {
+        <div class="card m-2" style="width: 18rem;">
+            <img src="@animal.ImageUrl" />
+            <div class="card-body">
+                <h5 class="card-title
+                        ">
+                    @animal.Name
+                </h5>
+                <p class="card-text">@animal.Description</p>
+                <p class="card-text">Kosten: @animal.Cost</p>
+            </div>
+        </div>
+    }
+</div>
