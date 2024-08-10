@@ -1,4 +1,5 @@
 ﻿using BeestjeFeestje.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,9 +12,15 @@ namespace BeestjeFeestje.Domain.Models
     public class BookingModel
     {
         [Key]
-        public int Id { get; set; }
+        public string Id { get; set; }
         public User Customer { get; set; }
         [Required]
         public DateTime Date { get; set; }
+        public IEnumerable<AnimalModel> Animals { get; set; }
+        public IdentityUser? User { get; set; }
+        public string? Name { get; set; }
+        public string? Email { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
     }
 }

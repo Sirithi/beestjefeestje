@@ -8,6 +8,18 @@
         <input type="hidden" asp-for="Animals"/>
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="User" />
+        @if(Model.User == null)
+        {
+            <input type="hidden" asp-for="Name"/>
+            <input type="hidden" asp-for="Email"/>
+            <input type="hidden" asp-for="PhoneNumber"/>
+            <input type="hidden" asp-for="Address"/>
+            <input type="hidden" asp-for="PostalCode"/>
+        }
+        else
+        {
+            <input type="hidden" asp-for="User" value="@Model.User" />
+        })
 
         <input type="submit" class="btn btn-primary" value="Boek" />
         <div class="">

@@ -4,7 +4,7 @@
 
 <form method="post" asp-action="BookTwo">
     <div id="wizard">
-        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Id"/>
         <input type="hidden" asp-for="Animals" />
         <input type="hidden" asp-for="SelectedAnimalNames" />
         <input type="hidden" asp-for="Name" />
@@ -39,6 +39,11 @@
                     <label asp-for="PhoneNumber"></label>
                     <input asp-for="PhoneNumber" class="form-control" />
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PostalCode"></label>
+                    <input asp-for="PostalCode" class="form-control" />
+                    <span asp-validation-for="PostalCode" class="text-danger"></span>
                 </div>
             </div>
         }

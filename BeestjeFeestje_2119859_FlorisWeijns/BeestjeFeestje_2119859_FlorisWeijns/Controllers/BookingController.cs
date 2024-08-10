@@ -79,6 +79,25 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> Create(BookingCreateViewModelThree model)
+        {
+            if(!ModelState.IsValid)
+            {
+                var modelTwo = new BookingCreateViewModelTwo(model);
+                return RedirectToAction("BookThree", modelTwo);
+            }
+
+            var booking = new BookingModel
+            {
+                Id = model.Id,
+                Date = model.Date,
+                User = model.User,
+                Animals = model.SelectedAnimals
+            };
+            return View(booking);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Book(BookingCreateViewModelOne model)
         {
             if (!ModelState.IsValid)

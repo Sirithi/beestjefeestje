@@ -3,13 +3,13 @@
 <h1>Boek een Beestje</h1>
 
 <div class="d-inline-flex">
-    <form asp-action="BookThree" method="post">
+    <form asp-action="Create" method="post">
         <input type="hidden" asp-for="Date" />
         <input type="hidden" asp-for="Animals" />
         <input type="hidden" asp-for="Id" />
-        <input type="hidden" asp-for="SelectedAnimalNames" />
         <input type="hidden" asp-for="User" />
-
+        <select asp-for="SelectedAnimalNames" asp-items="@Model.Animals" multiple hidden>
+        </select>
         <input type="submit" class="btn btn-primary" value="Boek" />
     </form>
 

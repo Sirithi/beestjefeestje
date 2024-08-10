@@ -20,6 +20,11 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             SelectedAnimals = modelOne.SelectedAnimals;
             AnimalList = modelOne.AnimalList;
             User = modelOne.User;
+            Name = modelOne.Name;
+            Email = modelOne.Email;
+            PhoneNumber = modelOne.PhoneNumber;
+            Address = modelOne.Address;
+            PostalCode = modelOne.PostalCode;
         }
         public BookingCreateViewModelTwo(
             string id, 
