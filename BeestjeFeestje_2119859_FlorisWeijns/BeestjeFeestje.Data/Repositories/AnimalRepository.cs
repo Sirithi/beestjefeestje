@@ -23,7 +23,7 @@ namespace BeestjeFeestje.Data.Repositories
 
         public async Task<Animal> GetByName(string name)
         {
-            var result = GetQuery().Where(a => a.Name == name).FirstOrDefault();
+            var result = await GetQuery().Where(a => a.Name == name).FirstOrDefaultAsync();
             if (result == null)
             {
                 throw new KeyNotFoundException();

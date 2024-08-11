@@ -34,12 +34,11 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             string? address, 
             string? postalCode, 
             DateTime date, 
-            MultiSelectList? 
-            animals, 
+            MultiSelectList? animals, 
             IEnumerable<string> selectedAnimalNames, 
             IEnumerable<AnimalModel>? selectedAnimals, 
             IEnumerable<AnimalModel> animalList, 
-            IdentityUser user)
+            IdentityUser? user)
         {
             Id = id;
             Name = name;
@@ -63,6 +62,11 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             Animals = modelThree.Animals;
             SelectedAnimals = modelThree.SelectedAnimals;
             AnimalList = modelThree.AnimalList;
+            User = modelThree.User;
+            Name = modelThree.Name;
+            Email = modelThree.Email;
+            PhoneNumber = modelThree.PhoneNumber;
+            Address = modelThree.Address;
         }
 
         public string Id { get; set; }

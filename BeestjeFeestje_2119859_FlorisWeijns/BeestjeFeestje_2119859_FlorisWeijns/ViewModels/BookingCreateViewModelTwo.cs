@@ -21,6 +21,11 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             SelectedAnimals = modelTwo.SelectedAnimals;
             AnimalList = modelTwo.AnimalList;
             User = modelTwo.User;
+            Email = modelTwo.Email;
+            Name = modelTwo.Name;
+            PhoneNumber = modelTwo.PhoneNumber;
+            Address = modelTwo.Address;
+            PostalCode = modelTwo.PostalCode;
         }
         public string Id { get; set; }
         public string? Name { get; set; }

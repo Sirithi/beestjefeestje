@@ -4,6 +4,7 @@ using BeestjeFeestje.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeestjeFeestje.Data.Migrations
 {
     [DbContext(typeof(BeestjeFeestjeDBContext))]
-    partial class BeestjeFeestjeDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240811123102_Update Booking entity")]
+    partial class UpdateBookingentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,11 +138,9 @@ namespace BeestjeFeestje.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
                 });
@@ -396,15 +397,6 @@ namespace BeestjeFeestje.Data.Migrations
                     b.Navigation("Animal");
 
                     b.Navigation("Booking");
-                });
-
-            modelBuilder.Entity("BeestjeFeestje.Data.Entities.Booking", b =>
-                {
-                    b.HasOne("BeestjeFeestje.Data.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

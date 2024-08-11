@@ -73,8 +73,25 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 return RedirectToAction("BookTwo", modelOne);
             }
 
+            if(modelTwo.SelectedAnimalNames == null)
+            {
+                ModelState.AddModelError("SelectedAnimalNames", "Please select at least one animal");
+                return RedirectToAction("BookTwo", modelTwo);
+            }
+
             var model = new BookingCreateViewModelThree(modelTwo);
-            model.SelectedAnimals = await _animalService.GetByNames(modelTwo.SelectedAnimalNames);
+            if (model.SelectedAnimalNames.Count() == 1)
+            {
+                
+                var toAppend = await _animalService.GetByName(model.SelectedAnimalNames.First());
+                model.SelectedAnimals = new List<AnimalModel>() { toAppend };
+                //model.SelectedAnimals.Append(toAppend);
+            }
+            else
+            {
+                model.SelectedAnimals = await _animalService.GetByNames(modelTwo.SelectedAnimalNames);
+            }
+            
             return View(model);
         }
 
@@ -87,12 +104,33 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 return RedirectToAction("BookThree", modelTwo);
             }
 
+            if (model.SelectedAnimals == null || model.SelectedAnimals.Count() == 0)
+            {
+                if(model.SelectedAnimalNames == null)
+                {
+                    ModelState.AddModelError("SelectedAnimalNames", "Please select at least one animal");
+                    return RedirectToAction("BookTwo", model);
+                }
+                else
+                {
+                    //var names = model.SelectedAnimalNames;
+                    var names = model.SelectedAnimalNames;
+                    //var animals = await _animalService.GetByNames(names);
+                    //model.SelectedAnimals = animals.ToList();
+                }
+            }
+
             var booking = new BookingModel
             {
                 Id = model.Id,
                 Date = model.Date,
                 User = model.User,
-                Animals = model.SelectedAnimals
+                Animals = model.SelectedAnimals,
+                Name = model.Name,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                Address = model.Address,
+                PostalCode = model.PostalCode
             };
             return View(booking);
         }

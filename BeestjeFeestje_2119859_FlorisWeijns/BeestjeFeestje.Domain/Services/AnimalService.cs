@@ -71,10 +71,16 @@ namespace BeestjeFeestje.Domain.Services
             return _mapper.Map<IEnumerable<AnimalModel>>(result);
         }
 
+        public async Task<AnimalModel> GetByName(string name)
+        {
+            var result = await _animalRepostiory.GetByName(name);
+            return _mapper.Map<AnimalModel>(result);
+        }
+
         public async Task<IEnumerable<AnimalModel>> GetByNames(IEnumerable<string> names)
         {
-            var output = await _animalRepostiory.GetByNames(names);
-            return _mapper.Map<IEnumerable<AnimalModel>>(output);
+            var result = await _animalRepostiory.GetByNames(names);
+            return _mapper.Map<IEnumerable<AnimalModel>>(result);
         }
 
         public async Task<AnimalModel> Update(AnimalModel animal)

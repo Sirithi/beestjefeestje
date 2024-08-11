@@ -12,8 +12,14 @@ namespace BeestjeFeestje.Data.Entities
     {
         [Key]
         public int Id { get; set; }
-        public User Customer { get; set; }
         [Required]
         public DateTime Date { get; set; }
+        public IEnumerable<Animal> Animals { get; set; }
+        public User? User { get; set; }
+        public string? Name { get; set; }
+        public string? Email { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Address { get; set; }
+        public string? PostalCode { get; set; }
     }
 }

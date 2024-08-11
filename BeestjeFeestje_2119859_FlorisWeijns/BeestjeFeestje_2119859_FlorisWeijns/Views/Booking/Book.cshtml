@@ -7,9 +7,6 @@
         <input type="hidden" asp-for="Id"/>
         <input type="hidden" asp-for="Animals" />
         <input type="hidden" asp-for="SelectedAnimalNames" />
-        <input type="hidden" asp-for="Name" />
-        <input type="hidden" asp-for="Email" />
-        <input type="hidden" asp-for="PhoneNumber" />
         <input type="hidden" asp-for="User" />
         <input type="submit" class="btn btn-primary pull-right" value="Boek"></input>
         <ul>
@@ -44,6 +41,11 @@
                     <label asp-for="PostalCode"></label>
                     <input asp-for="PostalCode" class="form-control" />
                     <span asp-validation-for="PostalCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Address"></label>
+                    <input asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
                 </div>
             </div>
         }
