@@ -1,4 +1,6 @@
-﻿@model BookingIndexViewModel;
+﻿@using BeestjeFeestje.Data.Entities
+@model BookingIndexViewModel;
+@inject UserManager<User> UserManager
 
 <h1>Boekingen</h1>
 
@@ -6,28 +8,33 @@
     <a asp-action="Book" class="btn btn-primary">Boek een feestje</a>
 </p>
 
-<table class="table">
-    <tr>
-        <th>Naam</th>
-        <th>Datum</th>
-        <th>Actions</th>
-    </tr>
-    @foreach (var booking in Model.Bookings)
-    {
+
+@if (User.IsInRole("Owner") || User.IsInRole("Admin"))
+{
+    <table class="table">
         <tr>
-            @if(booking.User == null)
-            {
-                <td>@booking.Name</td>
-            }
-            else
-            {
-                <td>@booking.User</td>
-            })
-            <td>@booking.Date</td>
-            <td>
-                <form asp-action="Delete" asp-route-id="@booking.Id">
-                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                </form>
-            </td>
+            <th>Naam</th>
+            <th>Datum</th>
+            <th>Actions</th>
         </tr>
-    }
+        @foreach (var booking in Model.Bookings)
+        {
+            <tr>
+                @if (booking.User == null)
+                {
+                    <td>@booking.Name</td>
+                }
+                else
+                {
+                    <td>@booking.User</td>
+                }
+                <td>@booking.Date</td>
+                <td>
+                    <form asp-action="Delete" asp-route-id="@booking.Id">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+}

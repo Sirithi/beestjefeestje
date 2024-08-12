@@ -21,10 +21,10 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var bookings = new BookingIndexViewModel(new List<BookingModel>());
-            return View(bookings);
+            var content = new BookingIndexViewModel(await _bookingService.GetAll());
+            return View(content);
         }
 
         public async Task<IActionResult> Book()

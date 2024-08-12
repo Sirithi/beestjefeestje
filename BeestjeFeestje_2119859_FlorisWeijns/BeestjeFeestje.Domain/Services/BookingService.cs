@@ -65,10 +65,10 @@ namespace BeestjeFeestje.Domain.Services
             return _mapper.Map<BookingModel>(booking);
         }
 
-        public Task<IEnumerable<BookingModel>> GetAll()
+        public async Task<IEnumerable<BookingModel>> GetAll()
         {
-            var bookings = _bookingRepository.GetAll();
-            return Task.FromResult(_mapper.Map<IEnumerable<BookingModel>>(bookings));
+            var result = await _bookingRepository.GetAll();
+            return _mapper.Map<IEnumerable<BookingModel>>(result);
         }
 
         public async Task<BookingModel> Update(BookingModel booking)
