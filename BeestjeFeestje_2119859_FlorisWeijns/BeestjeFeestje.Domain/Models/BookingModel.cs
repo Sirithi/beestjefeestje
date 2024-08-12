@@ -13,7 +13,6 @@ namespace BeestjeFeestje.Domain.Models
     {
         [Key]
         public string Id { get; set; }
-        public User Customer { get; set; }
         [Required]
         public DateTime Date { get; set; }
         public IEnumerable<AnimalModel> Animals { get; set; }
@@ -23,5 +22,6 @@ namespace BeestjeFeestje.Domain.Models
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
         public string? PostalCode { get; set; }
+        public bool IsConfirmed { get; set; }
     }
 }

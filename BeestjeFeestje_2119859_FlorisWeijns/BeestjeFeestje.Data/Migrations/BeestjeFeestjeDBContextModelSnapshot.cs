@@ -50,8 +50,8 @@ namespace BeestjeFeestje.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("BookingId")
-                        .HasColumnType("int");
+                    b.Property<string>("BookingId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Cost")
                         .HasColumnType("float");
@@ -87,34 +87,26 @@ namespace BeestjeFeestje.Data.Migrations
 
             modelBuilder.Entity("BeestjeFeestje.Data.Entities.AnimalBooking", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AnimalId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
+                    b.Property<string>("AnimalId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BookingId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AnimalId");
-
-                    b.HasIndex("BookingId");
 
                     b.ToTable("AnimalBookings");
                 });
 
             modelBuilder.Entity("BeestjeFeestje.Data.Entities.Booking", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -124,6 +116,9 @@ namespace BeestjeFeestje.Data.Migrations
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -379,23 +374,6 @@ namespace BeestjeFeestje.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("AnimalType");
-                });
-
-            modelBuilder.Entity("BeestjeFeestje.Data.Entities.AnimalBooking", b =>
-                {
-                    b.HasOne("BeestjeFeestje.Data.Entities.Animal", "Animal")
-                        .WithMany()
-                        .HasForeignKey("AnimalId");
-
-                    b.HasOne("BeestjeFeestje.Data.Entities.Booking", "Booking")
-                        .WithMany()
-                        .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Animal");
-
-                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("BeestjeFeestje.Data.Entities.Booking", b =>

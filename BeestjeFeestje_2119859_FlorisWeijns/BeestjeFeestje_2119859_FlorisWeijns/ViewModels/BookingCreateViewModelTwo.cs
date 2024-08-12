@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
+
 namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
 {
     public class BookingCreateViewModelThree
@@ -27,6 +28,8 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             Address = modelTwo.Address;
             PostalCode = modelTwo.PostalCode;
         }
+
+
         public string Id { get; set; }
         public string? Name { get; set; }
         public string? Email { get; set; }

@@ -34,5 +34,7 @@ namespace BeestjeFeestje.Domain.Models
         public string FarmId { get; set; }
         [Required]
         public string ImageUrl { get; set; }
+        [Required]
+        public bool IsConfirmed { get; set; }
     }
 }

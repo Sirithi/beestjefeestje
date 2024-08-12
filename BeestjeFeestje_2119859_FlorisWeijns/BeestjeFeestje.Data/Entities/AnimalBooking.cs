@@ -8,8 +8,8 @@ namespace BeestjeFeestje.Data.Entities
 {
     public class AnimalBooking
     {
-        public int Id { get; set; }
-        public Animal Animal { get; set; }
-        public Booking Booking { get; set; }
+        public string Id { get; set; }
+        public string AnimalId { get; set; }
+        public string BookingId { get; set; }
     }
 }

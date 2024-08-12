@@ -83,6 +83,5 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
         public IEnumerable<AnimalModel>? SelectedAnimals { get; set; }
         public IEnumerable<AnimalModel>? AnimalList { get; set; }
         public IdentityUser? User { get; set; }
-
     }
 }

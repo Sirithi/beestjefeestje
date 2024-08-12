@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BeestjeFeestje.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -185,17 +185,22 @@ namespace BeestjeFeestje.Data.Migrations
                 name: "Bookings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsConfirmed = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bookings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bookings_AspNetUsers_CustomerId",
-                        column: x => x.CustomerId,
+                        name: "FK_Bookings_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -207,19 +212,27 @@ namespace BeestjeFeestje.Data.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
                     AnimalName = table.Column<string>(type: "nvarchar(31)", maxLength: 31, nullable: false),
-                    Cost = table.Column<double>(type: "float", maxLength: 20, nullable: false),
+                    Cost = table.Column<double>(type: "float", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: false),
                     AnimalTypeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FarmId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    FarmId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BookingId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Animals", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Animals_Bookings_BookingId",
+                        column: x => x.BookingId,
+                        principalTable: "Bookings",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Animals_Farms_FarmId",
                         column: x => x.FarmId,
                         principalTable: "Farms",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Animals_Types_AnimalTypeId",
                         column: x => x.AnimalTypeId,
@@ -232,10 +245,9 @@ namespace BeestjeFeestje.Data.Migrations
                 name: "AnimalBookings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AnimalId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    BookingId = table.Column<int>(type: "int", nullable: false)
+                    BookingId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -249,8 +261,7 @@ namespace BeestjeFeestje.Data.Migrations
                         name: "FK_AnimalBookings_Bookings_BookingId",
                         column: x => x.BookingId,
                         principalTable: "Bookings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -267,6 +278,11 @@ namespace BeestjeFeestje.Data.Migrations
                 name: "IX_Animals_AnimalTypeId",
                 table: "Animals",
                 column: "AnimalTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Animals_BookingId",
+                table: "Animals",
+                column: "BookingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Animals_FarmId",
@@ -313,9 +329,9 @@ namespace BeestjeFeestje.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bookings_CustomerId",
+                name: "IX_Bookings_UserId",
                 table: "Bookings",
-                column: "CustomerId");
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -343,10 +359,10 @@ namespace BeestjeFeestje.Data.Migrations
                 name: "Animals");
 
             migrationBuilder.DropTable(
-                name: "Bookings");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "Bookings");
 
             migrationBuilder.DropTable(
                 name: "Farms");

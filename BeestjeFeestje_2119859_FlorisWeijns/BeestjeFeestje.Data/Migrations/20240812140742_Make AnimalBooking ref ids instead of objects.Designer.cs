@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeestjeFeestje.Data.Migrations
 {
     [DbContext(typeof(BeestjeFeestjeDBContext))]
-    [Migration("20240811123102_Update Booking entity")]
-    partial class UpdateBookingentity
+    [Migration("20240812140742_Make AnimalBooking ref ids instead of objects")]
+    partial class MakeAnimalBookingrefidsinsteadofobjects
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,8 +53,8 @@ namespace BeestjeFeestje.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("BookingId")
-                        .HasColumnType("int");
+                    b.Property<string>("BookingId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Cost")
                         .HasColumnType("float");
@@ -90,34 +90,26 @@ namespace BeestjeFeestje.Data.Migrations
 
             modelBuilder.Entity("BeestjeFeestje.Data.Entities.AnimalBooking", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AnimalId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
+                    b.Property<string>("AnimalId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BookingId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AnimalId");
-
-                    b.HasIndex("BookingId");
 
                     b.ToTable("AnimalBookings");
                 });
 
             modelBuilder.Entity("BeestjeFeestje.Data.Entities.Booking", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -127,6 +119,9 @@ namespace BeestjeFeestje.Data.Migrations
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -138,9 +133,11 @@ namespace BeestjeFeestje.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
                 });
@@ -382,21 +379,13 @@ namespace BeestjeFeestje.Data.Migrations
                     b.Navigation("AnimalType");
                 });
 
-            modelBuilder.Entity("BeestjeFeestje.Data.Entities.AnimalBooking", b =>
+            modelBuilder.Entity("BeestjeFeestje.Data.Entities.Booking", b =>
                 {
-                    b.HasOne("BeestjeFeestje.Data.Entities.Animal", "Animal")
+                    b.HasOne("BeestjeFeestje.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("AnimalId");
+                        .HasForeignKey("UserId");
 
-                    b.HasOne("BeestjeFeestje.Data.Entities.Booking", "Booking")
-                        .WithMany()
-                        .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Animal");
-
-                    b.Navigation("Booking");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

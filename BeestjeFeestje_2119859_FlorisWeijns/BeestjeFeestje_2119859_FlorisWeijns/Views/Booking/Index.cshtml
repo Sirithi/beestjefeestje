@@ -15,7 +15,14 @@
     @foreach (var booking in Model.Bookings)
     {
         <tr>
-            <td>@booking.Customer</td>
+            @if(booking.User == null)
+            {
+                <td>@booking.Name</td>
+            }
+            else
+            {
+                <td>@booking.User</td>
+            })
             <td>@booking.Date</td>
             <td>
                 <form asp-action="Delete" asp-route-id="@booking.Id">

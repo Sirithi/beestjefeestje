@@ -24,7 +24,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         public IActionResult Index()
         {
             var bookings = new BookingIndexViewModel(new List<BookingModel>());
-
             return View(bookings);
         }
 
@@ -80,45 +79,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             }
 
             var model = new BookingCreateViewModelThree(modelTwo);
-            if (model.SelectedAnimalNames.Count() == 1)
-            {
-                
-                var toAppend = await _animalService.GetByName(model.SelectedAnimalNames.First());
-                model.SelectedAnimals = new List<AnimalModel>() { toAppend };
-                //model.SelectedAnimals.Append(toAppend);
-            }
-            else
-            {
-                model.SelectedAnimals = await _animalService.GetByNames(modelTwo.SelectedAnimalNames);
-            }
-            
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(BookingCreateViewModelThree model)
-        {
-            if(!ModelState.IsValid)
-            {
-                var modelTwo = new BookingCreateViewModelTwo(model);
-                return RedirectToAction("BookThree", modelTwo);
-            }
-
-            if (model.SelectedAnimals == null || model.SelectedAnimals.Count() == 0)
-            {
-                if(model.SelectedAnimalNames == null)
-                {
-                    ModelState.AddModelError("SelectedAnimalNames", "Please select at least one animal");
-                    return RedirectToAction("BookTwo", model);
-                }
-                else
-                {
-                    //var names = model.SelectedAnimalNames;
-                    var names = model.SelectedAnimalNames;
-                    //var animals = await _animalService.GetByNames(names);
-                    //model.SelectedAnimals = animals.ToList();
-                }
-            }
+            model.SelectedAnimals = await _animalService.GetByNames(modelTwo.SelectedAnimalNames);
 
             var booking = new BookingModel
             {
@@ -132,27 +93,18 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 Address = model.Address,
                 PostalCode = model.PostalCode
             };
-            return View(booking);
+
+            await _bookingService.AddPlaceholder(booking);
+            
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Book(BookingCreateViewModelOne model)
+        public async Task<IActionResult> Confirm(BookingConfirmViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                if (model.Animals == null)
-                {
-                    var animals = await _animalService.GetAll();
-                    model.Animals = new MultiSelectList(
-                        animals.Select(e => e.Name),
-                        model.SelectedAnimalNames);
-                }
-                if (!ModelState.IsValid)
-                {
-                    return View(model);
-                }
-            }
-
+            BookingModel booking = await _bookingService.Get(model.Id);
+            booking.IsConfirmed = true;
+            await _bookingService.Update(booking);
             return RedirectToAction("Index");
         }
     }

@@ -11,7 +11,7 @@ namespace BeestjeFeestje.Data.Entities
     public class Booking
     {
         [Key]
-        public int Id { get; set; }
+        public string Id { get; set; }
         [Required]
         public DateTime Date { get; set; }
         public IEnumerable<Animal> Animals { get; set; }
@@ -21,5 +21,6 @@ namespace BeestjeFeestje.Data.Entities
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
         public string? PostalCode { get; set; }
+        public bool IsConfirmed { get; set; }
     }
 }
