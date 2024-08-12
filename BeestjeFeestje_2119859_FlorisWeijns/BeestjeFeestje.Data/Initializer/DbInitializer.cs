@@ -10,10 +10,13 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Data
     {
         public static async Task Initialize(IServiceProvider serviceProvider)
         {
-            var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             using var context = new BeestjeFeestjeDBContext(
             serviceProvider.GetRequiredService<DbContextOptions<BeestjeFeestjeDBContext>>());
+            context.Database.Migrate();
+            var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            
+            
 
             if (!await roleManager.RoleExistsAsync("Admin"))
             {
