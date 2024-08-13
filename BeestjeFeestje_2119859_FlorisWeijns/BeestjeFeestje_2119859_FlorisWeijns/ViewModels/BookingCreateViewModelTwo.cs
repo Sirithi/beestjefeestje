@@ -21,7 +21,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             SelectedAnimalNames = modelTwo.SelectedAnimalNames;
             SelectedAnimals = modelTwo.SelectedAnimals;
             AnimalList = modelTwo.AnimalList;
-            User = modelTwo.User;
+            UserId = modelTwo.UserId;
             Email = modelTwo.Email;
             Name = modelTwo.Name;
             PhoneNumber = modelTwo.PhoneNumber;
@@ -43,6 +43,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
         public IEnumerable<string> SelectedAnimalNames { get; set; }
         public IEnumerable<AnimalModel>? SelectedAnimals { get; set; }
         public IEnumerable<AnimalModel>? AnimalList { get; set; }
-        public IdentityUser? User { get; set; }
+        public string? UserId { get; set; }
     }
 }

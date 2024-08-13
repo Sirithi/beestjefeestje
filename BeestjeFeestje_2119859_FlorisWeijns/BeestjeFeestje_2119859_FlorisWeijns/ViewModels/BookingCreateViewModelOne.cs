@@ -25,7 +25,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             Animals = modelTwo.Animals;
             SelectedAnimals = modelTwo.SelectedAnimals;
             AnimalList = modelTwo.AnimalList;
-            User = modelTwo.User;
+            UserId = modelTwo.UserId;
         }
 
         public string Id { get; set; }
@@ -41,6 +41,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
         public IEnumerable<string> SelectedAnimalNames { get; set; }
         public IEnumerable<AnimalModel>? SelectedAnimals { get; set; }
         public IEnumerable<AnimalModel>? AnimalList { get; set; }
-        public IdentityUser? User { get; set; }
+        public string? UserId { get; set; }
     }
 }

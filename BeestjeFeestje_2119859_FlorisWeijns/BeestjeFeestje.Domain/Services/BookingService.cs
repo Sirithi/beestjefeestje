@@ -4,6 +4,7 @@ using BeestjeFeestje.Data.Repositories;
 using BeestjeFeestje.Data.Repositories.Interfaces;
 using BeestjeFeestje.Domain.Models;
 using BeestjeFeestje.Domain.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,16 @@ namespace BeestjeFeestje.Domain.Services
         private readonly IBookingRepository _bookingRepository;
         private readonly IAnimalRepository _animalRepository;
         private readonly IAnimalBookingRepository _animalBookingrepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public BookingService(IBookingRepository bookingRepository, IMapper mapper, IAnimalBookingRepository animalBookingrepository, IAnimalRepository animalRepository)
+        public BookingService(IBookingRepository bookingRepository, IMapper mapper, IAnimalBookingRepository animalBookingrepository, IAnimalRepository animalRepository, IUserRepository userRepository)
         {
             _bookingRepository = bookingRepository;
             _mapper = mapper;
             _animalBookingrepository = animalBookingrepository;
             _animalRepository = animalRepository;
+            _userRepository = userRepository;
         }
 
         public Task<BookingModel> Add(BookingModel booking)
@@ -69,6 +72,12 @@ namespace BeestjeFeestje.Domain.Services
         {
             var result = await _bookingRepository.GetAll();
             return _mapper.Map<IEnumerable<BookingModel>>(result);
+        }
+
+        public async Task<IEnumerable<BookingModel>> GetByUser(UserModel user)
+        {
+            var bookings = await _bookingRepository.GetByUser(_mapper.Map<User>(user));
+            return _mapper.Map<IEnumerable<BookingModel>>(bookings);
         }
 
         public async Task<BookingModel> Update(BookingModel booking)

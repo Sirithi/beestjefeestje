@@ -12,9 +12,8 @@ using Microsoft.EntityFrameworkCore;
 namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 {
     [Authorize]
-    public class AnimalController(BeestjeFeestjeDBContext context, IAnimalService animalService, IAnimalTypeService animalTypeService, UserManager<User> userManager) : Controller
+    public class AnimalController(IAnimalService animalService, IAnimalTypeService animalTypeService, UserManager<User> userManager) : Controller
     {
-        //private readonly BeestjeFeestjeDBContext _context = context;
         private readonly IAnimalService _animalService = animalService;
         private readonly IAnimalTypeService _animalTypeService = animalTypeService;
         private readonly UserManager<User> _userManager = userManager;
@@ -41,11 +40,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(AnimalCreateViewModel model)
         {
-            var errors = ModelState
-            .Where(x => x.Value.Errors.Count > 0)
-            .Select(x => new { x.Key, x.Value.Errors })
-            .ToArray();
-
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -64,7 +58,11 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             };
 
             var userId = _userManager.GetUserId(User);
-            var user = await _userManager.FindByIdAsync(userId);
+            User? user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                   return RedirectToAction("Index");
+            }
             var farmId = user.FarmId;
 
             try

@@ -8,33 +8,39 @@
     <a asp-action="Book" class="btn btn-primary">Boek een feestje</a>
 </p>
 
-
-@if (User.IsInRole("Owner") || User.IsInRole("Admin"))
+@if(User != null)
 {
-    <table class="table">
-        <tr>
-            <th>Naam</th>
-            <th>Datum</th>
-            <th>Actions</th>
-        </tr>
-        @foreach (var booking in Model.Bookings)
+    @if (User.IsInRole("Owner") || User.IsInRole("Admin") || User.IsInRole("User"))
+    {
+        @if(Model.Bookings != null)
         {
-            <tr>
-                @if (booking.User == null)
+            <table class="table">
+                <tr>
+                    <th>Naam</th>
+                    <th>Datum</th>
+                    <th>Actions</th>
+                </tr>
+                @foreach (var booking in Model.Bookings)
                 {
-                    <td>@booking.Name</td>
+                    <tr>
+                        @if (booking.User == null)
+                        {
+                            <td>@booking.Name</td>
+                        }
+                        else
+                        {
+                            <td>@booking.User</td>
+                        }
+                        <td>@booking.Date</td>
+                        <td>
+                            <form asp-action="Delete" asp-route-id="@booking.Id">
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
                 }
-                else
-                {
-                    <td>@booking.User</td>
-                }
-                <td>@booking.Date</td>
-                <td>
-                    <form asp-action="Delete" asp-route-id="@booking.Id">
-                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
+            </table>
         }
-    </table>
+    }
 }
+

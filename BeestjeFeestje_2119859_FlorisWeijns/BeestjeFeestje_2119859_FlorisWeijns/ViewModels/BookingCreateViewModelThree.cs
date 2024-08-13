@@ -19,7 +19,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             Animals = modelOne.Animals;
             SelectedAnimals = modelOne.SelectedAnimals;
             AnimalList = modelOne.AnimalList;
-            User = modelOne.User;
+            UserId = modelOne.UserId;
             Name = modelOne.Name;
             Email = modelOne.Email;
             PhoneNumber = modelOne.PhoneNumber;
@@ -38,7 +38,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             IEnumerable<string> selectedAnimalNames, 
             IEnumerable<AnimalModel>? selectedAnimals, 
             IEnumerable<AnimalModel> animalList, 
-            IdentityUser? user)
+            string? userId)
         {
             Id = id;
             Name = name;
@@ -51,7 +51,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             SelectedAnimalNames = selectedAnimalNames;
             SelectedAnimals = selectedAnimals;
             AnimalList = animalList;
-            User = user;
+            UserId = userId;
         }
 
         public BookingCreateViewModelTwo(BookingCreateViewModelThree modelThree)
@@ -62,7 +62,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             Animals = modelThree.Animals;
             SelectedAnimals = modelThree.SelectedAnimals;
             AnimalList = modelThree.AnimalList;
-            User = modelThree.User;
+            UserId = modelThree.UserId;
             Name = modelThree.Name;
             Email = modelThree.Email;
             PhoneNumber = modelThree.PhoneNumber;
@@ -82,6 +82,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
         public IEnumerable<string> SelectedAnimalNames { get; set; }
         public IEnumerable<AnimalModel>? SelectedAnimals { get; set; }
         public IEnumerable<AnimalModel>? AnimalList { get; set; }
-        public IdentityUser? User { get; set; }
+        public string? UserId { get; set; }
     }
 }

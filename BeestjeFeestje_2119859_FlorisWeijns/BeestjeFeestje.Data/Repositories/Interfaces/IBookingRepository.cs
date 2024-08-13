@@ -10,5 +10,6 @@ namespace BeestjeFeestje.Data.Repositories.Interfaces
 {
     public interface IBookingRepository : IRepository<Booking, string>
     {
+        public Task<IEnumerable<Booking>> GetByUser(User user);
     }
 }

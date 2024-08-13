@@ -15,6 +15,7 @@ namespace BeestjeFeestje.Domain.Models.Map
             CreateMap<Animal, AnimalModel>().ReverseMap();
             CreateMap<AType, ATypeModel>().ReverseMap();
             CreateMap<Booking, BookingModel>().ReverseMap();
+            CreateMap<User, UserModel>().ReverseMap();
             //CreateMap<AnimalBooking, AnimalBookingModel>();
         }
     }

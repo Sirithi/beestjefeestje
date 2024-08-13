@@ -1,4 +1,5 @@
-﻿using BeestjeFeestje.Data.Entities;
+﻿using AutoMapper;
+using BeestjeFeestje.Data.Entities;
 using BeestjeFeestje.Domain.Models;
 using BeestjeFeestje.Domain.Services.Interfaces;
 using BeestjeFeestje_2119859_FlorisWeijns.ViewModels;
@@ -13,18 +14,25 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         private readonly IAnimalService _animalService;
         private readonly IBookingService _bookingService;
         private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
-        public BookingController(IAnimalService animalService, IBookingService bookingService, UserManager<User> userManager)
+        public BookingController(IAnimalService animalService, IBookingService bookingService, UserManager<User> userManager, IMapper mapper)
         {
             _animalService = animalService;
             _bookingService = bookingService;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
         {
-            var content = new BookingIndexViewModel(await _bookingService.GetAll());
-            return View(content);
+            if(User.IsInRole("Admin"))
+            {
+                var content = new BookingIndexViewModel(await _bookingService.GetAll());
+                return View(content);
+            }
+            var userContent = new BookingIndexViewModel(await _bookingService.GetByUser(_mapper.Map<UserModel>(await _userManager.GetUserAsync(User))));
+            return View(userContent);
         }
 
         public async Task<IActionResult> Book()
@@ -33,7 +41,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             var user = await _userManager.GetUserAsync(User);
             if(user != null)
             {
-                model.User = user;
+                model.UserId = user.Id;
             }
             model.Date = DateTime.Now;
             model.Id = Guid.NewGuid().ToString();
@@ -49,16 +57,10 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 return RedirectToAction("Book", modelOne);
             }
             var model = new BookingCreateViewModelTwo(modelOne);
-            if(model.AnimalList == null)
-            {
-                model.AnimalList = await _animalService.GetAll();
-            }
-            if (model.Animals == null)
-            {
-                model.Animals = new MultiSelectList(
+            model.AnimalList ??= await _animalService.GetAll();
+            model.Animals ??= new MultiSelectList(
                 model.AnimalList.Select(e => e.Name),
                 model.SelectedAnimalNames);
-            }
 
             return View(model);
         }
@@ -78,14 +80,24 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 return RedirectToAction("BookTwo", modelTwo);
             }
 
-            var model = new BookingCreateViewModelThree(modelTwo);
+            BookingCreateViewModelThree model = new(modelTwo);
             model.SelectedAnimals = await _animalService.GetByNames(modelTwo.SelectedAnimalNames);
 
+            User? user = new();
+
+            if (model.UserId != null)
+            {
+                user = await _userManager.FindByIdAsync(model.UserId);
+            } else
+            {
+                user = null;
+            }
+            
             var booking = new BookingModel
             {
                 Id = model.Id,
                 Date = model.Date,
-                User = model.User,
+                User = user,
                 Animals = model.SelectedAnimals,
                 Name = model.Name,
                 Email = model.Email,

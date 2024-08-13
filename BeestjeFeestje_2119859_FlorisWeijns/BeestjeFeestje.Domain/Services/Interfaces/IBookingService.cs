@@ -15,5 +15,6 @@ namespace BeestjeFeestje.Domain.Services.Interfaces
         Task<bool> Delete(string id);
         Task<BookingModel> AddPlaceholder(BookingModel booking);
         Task<BookingModel> Update(BookingModel animal);
+        Task<IEnumerable<BookingModel>> GetByUser(UserModel user);
     }
 }

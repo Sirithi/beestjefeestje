@@ -50,17 +50,12 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Data
                 string farmName = "SuperFarm";
                 if (!await context.Farms.AnyAsync(f => f.FarmName == farmName))
                 {
-                    Farm farm = new Farm(farmName);
+                    Farm farm = new(farmName);
                     context.Farms.Add(farm);
                     await context.SaveChangesAsync();
                 }
 
-                Farm? dbFarm = context.Farms.FirstOrDefault(f => f.FarmName == farmName);
-                if (dbFarm == null)
-                {
-                    throw new Exception("Farm not found");
-                }
-
+                Farm? dbFarm = context.Farms.FirstOrDefault(f => f.FarmName == farmName) ?? throw new Exception("Farm not found");
                 superFarmId = dbFarm.Id;
             }
             catch (Exception e)
@@ -95,14 +90,14 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Data
                     await userManager.AddToRoleAsync(superUser, "Admin");
                 }
             }
-            List<AType> aTypes = new List<AType>
-            {
-                 new AType("Jungle"),
-                 new AType("Sneeuw"),
-                 new AType("Boerderij"),
-                 new AType("Woestijn"),
-                 new AType("VIP")
-            };
+            List<AType> aTypes =
+            [
+                 new("Jungle"),
+                 new("Sneeuw"),
+                 new("Boerderij"),
+                 new("Woestijn"),
+                 new("VIP")
+            ];
 
             aTypes.ForEach(aType =>
             {
@@ -124,7 +119,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Data
 
         private static void MakeAnimals(BeestjeFeestjeDBContext context, string superFarmId, AType jungleType, AType farmType, AType snowType, AType desertType, AType vipType)
         {
-            List<Animal> animals = new List<Animal>()
+            List<Animal> animals = new()
             {
                 new Animal("Tarzan", "Aap", 8.0, "Een aap uit de jungle", jungleType, superFarmId, "https://static.vecteezy.com/system/resources/previews/003/513/751/non_2x/cute-monkey-hanging-tree-cartoon-illustration-free-vector.jpg"),
                 new Animal("Kolonel", "Olifant", 7.4, "Een olifant uit de jungle", jungleType, superFarmId, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxh6FRUA2OHUJQ7InKst3dpJiDq2KrkbWwjQ&s"),
