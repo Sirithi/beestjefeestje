@@ -31,8 +31,13 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 var content = new BookingIndexViewModel(await _bookingService.GetAll());
                 return View(content);
             }
-            var userContent = new BookingIndexViewModel(await _bookingService.GetByUser(_mapper.Map<UserModel>(await _userManager.GetUserAsync(User))));
-            return View(userContent);
+            if(User.IsInRole("User"))
+            {
+                var user = await _userManager.GetUserAsync(User);
+                var userContent = new BookingIndexViewModel(await _bookingService.GetByUser(_mapper.Map<UserModel>(user)));
+                return View(userContent);
+            }
+            return View(new BookingIndexViewModel());
         }
 
         public async Task<IActionResult> Book()
@@ -118,6 +123,14 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             booking.IsConfirmed = true;
             await _bookingService.Update(booking);
             return RedirectToAction("Index");
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            await _bookingService.Delete(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

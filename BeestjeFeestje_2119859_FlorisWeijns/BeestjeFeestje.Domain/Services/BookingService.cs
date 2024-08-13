@@ -57,9 +57,15 @@ namespace BeestjeFeestje.Domain.Services
             return _mapper.Map<BookingModel>(result);
         }
 
-        public Task<bool> Delete(string id)
+        public async Task<bool> Delete(string id)
         {
-            throw new NotImplementedException();
+            Booking booking = await _bookingRepository.Get(id);
+            if (booking == null)
+            {
+                return false;
+            }
+            await _bookingRepository.Delete(booking);
+            return true;
         }
 
         public async Task<BookingModel> Get(string id)

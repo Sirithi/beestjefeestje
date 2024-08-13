@@ -10,7 +10,7 @@
 
     <div>
         <h3>Boeking Info</h3>
-        <p>Geselecteerde Datum: @Model.Date</p>
+        <p>Geselecteerde Datum: @Model.Date.ToShortDateString()</p>
         <p>Geselecteerde Beestjes:</p>
         <div class="d-inline-flex flex-row justify-content-center flex-wrap">
             @foreach (var animal in Model.SelectedAnimals)

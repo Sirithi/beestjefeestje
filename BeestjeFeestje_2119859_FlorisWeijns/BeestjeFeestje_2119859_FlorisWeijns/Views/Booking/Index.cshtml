@@ -31,11 +31,15 @@
                         {
                             <td>@booking.User</td>
                         }
-                        <td>@booking.Date</td>
+                        <td>@booking.Date.ToShortDateString()</td>
                         <td>
-                            <form asp-action="Delete" asp-route-id="@booking.Id">
-                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                            </form>
+                            @if (User.IsInRole("Admin") || User.IsInRole("Owner") || @booking.User == Model.User)
+                            {
+                                <form asp-action="Delete" asp-route-id="@booking.Id">
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            }
+                            
                         </td>
                     </tr>
                 }
