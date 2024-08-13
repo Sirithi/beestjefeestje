@@ -39,7 +39,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
         [Required]
         public DateTime Date { get; set; }
         public MultiSelectList? Animals { get;  set; }
-        [Required]
+        [Required, MinLength(1)]
         public IEnumerable<string> SelectedAnimalNames { get; set; }
         public IEnumerable<AnimalModel>? SelectedAnimals { get; set; }
         public IEnumerable<AnimalModel>? AnimalList { get; set; }

@@ -19,11 +19,11 @@
         else
         {
             <input type="hidden" asp-for="UserId" value="@Model.UserId" />
-        })
+        }
 
         <input type="submit" class="btn btn-primary" value="Boek" />
         <div class="">
-            <label asp-for="SelectedAnimalNames">Selecteer de dieren die je wilt boeken:</label>
+            <label asp-for="SelectedAnimalNames">Selecteer de dieren die je wil boeken:</label>
             <select asp-for="SelectedAnimalNames" asp-items="@Model.Animals" multiple>
             </select>
         </div>
@@ -32,7 +32,6 @@
     <div>
         <h3>Order Info</h3>
         <p>Selected Date: @Model.Date</p>
-        <p>Selected Animals:</p>
     </div>
 </div>
 <div class="d-inline-flex flex-row justify-content-center flex-wrap">
@@ -45,8 +44,9 @@
                         ">
                     @animal.Name
                 </h5>
-                <p class="card-text">@animal.Description</p>
+                <p class="card-text">@animal.AnimalType.Name</p>
                 <p class="card-text">Kosten: @animal.Cost</p>
+                <p class="card-text">Type: @animal.Description</p>
             </div>
         </div>
     }
