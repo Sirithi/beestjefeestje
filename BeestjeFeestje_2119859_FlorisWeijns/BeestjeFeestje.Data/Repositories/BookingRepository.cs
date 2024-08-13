@@ -2,11 +2,6 @@
 using BeestjeFeestje.Data.Entities;
 using BeestjeFeestje.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BeestjeFeestje.Data.Repositories
 {
@@ -16,9 +11,21 @@ namespace BeestjeFeestje.Data.Repositories
         {
         }
 
+        public async Task<IEnumerable<Booking>> GetAllWithRelations()
+        {
+            var bookings = await GetQuery().Include(b => b.Animals).Include(b => b.User).ToListAsync();
+            return bookings;
+        }
+
         public async Task<IEnumerable<Booking>> GetByUser(User user)
         {
             var bookings = await GetQuery().Where(b => b.User == user).ToListAsync();
+            return bookings;
+        }
+
+        public async Task<IEnumerable<Booking>> GetByUserWithRelations(User user)
+        {
+            var bookings = await GetQuery().Include(b => b.Animals).Include(b => b.User).Where(b => b.User == user).ToListAsync();
             return bookings;
         }
     }

@@ -12,9 +12,11 @@ namespace BeestjeFeestje.Domain.Services.Interfaces
         Task<BookingModel> Get(string id);
         Task<BookingModel> Add(BookingModel booking);
         Task<IEnumerable<BookingModel>> GetAll();
+        Task<IEnumerable<BookingModel>> GetAllWithRelations();
         Task<bool> Delete(string id);
         Task<BookingModel> AddPlaceholder(BookingModel booking);
         Task<BookingModel> Update(BookingModel animal);
         Task<IEnumerable<BookingModel>> GetByUser(UserModel user);
+        Task<IEnumerable<BookingModel>> GetByUserWithRelations(UserModel user);
     }
 }

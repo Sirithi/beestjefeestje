@@ -80,9 +80,21 @@ namespace BeestjeFeestje.Domain.Services
             return _mapper.Map<IEnumerable<BookingModel>>(result);
         }
 
+        public async Task<IEnumerable<BookingModel>> GetAllWithRelations()
+        {
+            var result = await _bookingRepository.GetAllWithRelations();
+            return _mapper.Map<IEnumerable<BookingModel>>(result);
+        }
+
         public async Task<IEnumerable<BookingModel>> GetByUser(UserModel user)
         {
             var bookings = await _bookingRepository.GetByUser(_mapper.Map<User>(user));
+            return _mapper.Map<IEnumerable<BookingModel>>(bookings);
+        }
+
+        public async Task<IEnumerable<BookingModel>> GetByUserWithRelations(UserModel user)
+        {
+            var bookings = await _bookingRepository.GetByUserWithRelations(_mapper.Map<User>(user));
             return _mapper.Map<IEnumerable<BookingModel>>(bookings);
         }
 

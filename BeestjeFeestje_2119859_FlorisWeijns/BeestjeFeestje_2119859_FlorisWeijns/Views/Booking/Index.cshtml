@@ -33,7 +33,7 @@
                         }
                         <td>@booking.Date.ToShortDateString()</td>
                         <td>
-                            @if (User.IsInRole("Admin") || User.IsInRole("Owner") || @booking.User == Model.User)
+                            @if (User.IsInRole("Admin") || User.IsInRole("Owner") || User.IsInRole("User"))
                             {
                                 <form asp-action="Delete" asp-route-id="@booking.Id">
                                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
