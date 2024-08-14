@@ -8,7 +8,7 @@
 
 <h2>User Management</h2>
 
-@if (User.IsInRole("Admin"))
+@if (User.IsInRole("Admin") || User.IsInRole("Owner"))
 {
     <p>
         <a asp-action="CreateRole" class="btn btn-primary">Create New Role</a>

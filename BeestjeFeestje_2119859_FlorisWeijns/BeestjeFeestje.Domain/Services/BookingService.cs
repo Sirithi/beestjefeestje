@@ -19,15 +19,23 @@ namespace BeestjeFeestje.Domain.Services
         private readonly IAnimalRepository _animalRepository;
         private readonly IAnimalBookingRepository _animalBookingrepository;
         private readonly IUserRepository _userRepository;
+        private readonly IFarmRepository _farmRepository;
         private readonly IMapper _mapper;
 
-        public BookingService(IBookingRepository bookingRepository, IMapper mapper, IAnimalBookingRepository animalBookingrepository, IAnimalRepository animalRepository, IUserRepository userRepository)
+        public BookingService(
+            IBookingRepository bookingRepository,
+            IMapper mapper,
+            IAnimalBookingRepository animalBookingrepository,
+            IAnimalRepository animalRepository,
+            IUserRepository userRepository,
+            IFarmRepository farmRepository)
         {
             _bookingRepository = bookingRepository;
             _mapper = mapper;
             _animalBookingrepository = animalBookingrepository;
             _animalRepository = animalRepository;
             _userRepository = userRepository;
+            _farmRepository = farmRepository;
         }
 
         public Task<BookingModel> Add(BookingModel booking)
@@ -83,6 +91,14 @@ namespace BeestjeFeestje.Domain.Services
         public async Task<IEnumerable<BookingModel>> GetAllWithRelations()
         {
             var result = await _bookingRepository.GetAllWithRelations();
+            return _mapper.Map<IEnumerable<BookingModel>>(result);
+        }
+
+        public async Task<IEnumerable<BookingModel>> GetByOwnerWithRelations(UserModel user)
+        {
+            var users = await _userRepository.GetAllByFarm(user.FarmId);
+            var ids = users.Select(u => u.Id);
+            var result = await _bookingRepository.GetAllByFarmWithRelations(ids);
             return _mapper.Map<IEnumerable<BookingModel>>(result);
         }
 

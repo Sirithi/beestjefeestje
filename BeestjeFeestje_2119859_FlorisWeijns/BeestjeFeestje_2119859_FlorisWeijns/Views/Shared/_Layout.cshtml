@@ -28,14 +28,17 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        @if (SignInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Animal" asp-action="Index">Dieren</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Index">Admin Panel</a>
-                            </li>
+                            @if (User.IsInRole("Owner") || User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Animal" asp-action="Index">Dieren</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Index">Admin Panel</a>
+                                </li>
+                            }
                         }
                         <li>
                             <a class="nav-link" asp-area="" asp-controller="Booking" asp-action="Index">Boekingen</a>

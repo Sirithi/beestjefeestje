@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using BeestjeFeestje.Data.Entities;
+using System.Security.Claims;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Owner")]
     public class AdminController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, ILogger<AdminController> logger) : Controller
     {
         private readonly UserManager<User> _userManager = userManager;
@@ -22,8 +23,8 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var users = await _userManager.Users.ToListAsync();
-            var model = new AdminViewModel { Users = users };
+            var users = await _getUsers(User);
+            var model = new AdminViewModel { Users = users.ToList() };
 
             return View(model);
         }
@@ -106,6 +107,18 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 }
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task<IEnumerable<User>> _getUsers(ClaimsPrincipal user)
+        {
+            if (User.IsInRole("Admin"))
+            {
+                return await _userManager.Users.ToListAsync();
+            }
+
+            var adminUser = await _userManager.GetUserAsync(user);
+            var users = await _userManager.Users.Where(u => u.FarmId == adminUser.FarmId).ToListAsync();
+            return users;
         }
     }
 }

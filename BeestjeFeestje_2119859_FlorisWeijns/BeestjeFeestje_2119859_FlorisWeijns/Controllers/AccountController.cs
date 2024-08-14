@@ -24,7 +24,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(InputModel Input)
+        public async Task<IActionResult> Register(RegisterInputModel Input)
         {
             if (ModelState.IsValid)
             {
@@ -38,11 +38,12 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 _context.Farms.Add(farm);
                 await _context.SaveChangesAsync();
 
-                var user = new User { UserName = Input.Email, Email = Input.Email, FarmId = farm.Id, PhoneNumber = Input.PhoneNumber };
+                var user = new User { UserName = Input.Email, Email = Input.Email, FarmId = farm.Id, PhoneNumber = Input.PhoneNumber, PostalCode = Input.PostalCode, Address = Input.Address};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
+                    IdentityResult roleResult = await _userManager.AddToRolesAsync(user, ["Owner"]);
                     return LocalRedirect("/");
                 }
                 foreach (var error in result.Errors)

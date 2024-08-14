@@ -11,6 +11,12 @@ namespace BeestjeFeestje.Data.Repositories
         {
         }
 
+        public async Task<IEnumerable<Booking>> GetAllByFarmWithRelations(IEnumerable<string> ids)
+        {
+            var bookings = await GetQuery().Include(b => b.Animals).Include(b => b.User).Where(b => b.User == null || ids.Contains(b.User.Id)).ToListAsync();
+            return bookings;
+        }
+
         public async Task<IEnumerable<Booking>> GetAllWithRelations()
         {
             var bookings = await GetQuery().Include(b => b.Animals).Include(b => b.User).ToListAsync();

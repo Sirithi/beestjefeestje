@@ -1,4 +1,4 @@
-﻿@model BeestjeFeestje_2119859_FlorisWeijns.ViewModels.InputModel
+﻿@model BeestjeFeestje_2119859_FlorisWeijns.ViewModels.RegisterInputModel
 
 <h2>Register</h2>
 <div class="row">
@@ -26,6 +26,16 @@
                 <label asp-for="FarmName"></label>
                 <input asp-for="FarmName" class="form-control" />
                 <span asp-validation-for="FarmName" class="text"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PostalCode"></label>
+                <input asp-for="PostalCode" class="form-control" />
+                <span asp-validation-for="PostalCode" class="text"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PhoneNumber"></label>

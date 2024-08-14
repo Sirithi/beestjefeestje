@@ -10,6 +10,6 @@ namespace BeestjeFeestje.Data.Repositories.Interfaces
 {
     public interface IUserRepository : IRepository<User, string>
     {
-        
+        Task<IEnumerable<User>> GetAllByFarm(string id);
     }
 }

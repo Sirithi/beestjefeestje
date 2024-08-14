@@ -37,6 +37,12 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 var userContent = new BookingIndexViewModel(await _bookingService.GetByUserWithRelations(_mapper.Map<UserModel>(user)));
                 return View(userContent);
             }
+            if(User.IsInRole("Owner"))
+            {
+                var user = await _userManager.GetUserAsync(User);
+                var userContent = new BookingIndexViewModel(await _bookingService.GetByOwnerWithRelations(_mapper.Map<UserModel>(user)));
+                return View(userContent);
+            }
             return View(new BookingIndexViewModel());
         }
 

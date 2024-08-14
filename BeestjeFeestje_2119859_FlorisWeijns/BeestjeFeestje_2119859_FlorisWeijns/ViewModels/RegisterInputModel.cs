@@ -2,7 +2,7 @@
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
 {
-    public class InputModel
+    public class RegisterInputModel
     {
         [Required]
         [EmailAddress]
@@ -25,6 +25,18 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
         [Display(Name = "FarmName")]
         [DataType(DataType.Text)]
         public string FarmName { get; set; }
+
+        [Required]
+        [StringLength(20, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 1)]
+        [Display(Name = "FarmLocation")]
+        [DataType(DataType.Text)]
+        public string Address { get; set; }
+
+        [Required]
+        [StringLength(6, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [Display(Name = "PostCode")]
+        [DataType(DataType.PostalCode)]
+        public string PostalCode { get; set; }
 
         [Required]
         [StringLength(10, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 10)]
