@@ -10,5 +10,11 @@ namespace BeestjeFeestje.Data.Repositories.Interfaces
 {
     public interface IAnimalBookingRepository : IRepository<AnimalBooking, string>
     {
+        public Task<IEnumerable<AnimalBooking>> GetByBooking(Booking booking);
+        public Task<IEnumerable<AnimalBooking>> GetByAnimal(Animal animal);
+        public Task<IEnumerable<AnimalBooking>> GetByAnimalWithRelations(Animal animal);
+        public Task<IEnumerable<AnimalBooking>> GetByBookingWithRelations(Booking booking);
+        public Task<IEnumerable<AnimalBooking>> GetAllWithRelations();
+        public Task<AnimalBooking> GetWithRelations(string id);
     }
 }

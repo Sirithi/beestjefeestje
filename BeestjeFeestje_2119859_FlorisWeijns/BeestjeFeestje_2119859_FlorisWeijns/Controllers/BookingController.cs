@@ -138,5 +138,11 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             await _bookingService.Delete(id);
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Detail(string id)
+        {
+            var booking = await _bookingService.GetWithRelations(id);
+            return View(new BookingDetailViewModel(booking));
+        }
     }
 }

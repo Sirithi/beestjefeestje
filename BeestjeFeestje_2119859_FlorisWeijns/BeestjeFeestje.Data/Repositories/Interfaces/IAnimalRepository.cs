@@ -14,5 +14,6 @@ namespace BeestjeFeestje.Data.Repositories.Interfaces
         public Task<Animal> GetByName(string name);
         public Task<Animal> GetWithRelations(string id);
         public Task<IEnumerable<Animal>> GetByNames(IEnumerable<string> names);
+        public Task<IEnumerable<Animal>> GetAllByIdWithRelations(IEnumerable<string> ids);
     }
 }

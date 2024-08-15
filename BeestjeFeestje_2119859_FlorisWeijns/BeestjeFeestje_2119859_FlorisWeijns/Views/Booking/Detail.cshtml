@@ -1,5 +1,61 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model BookingDetailViewModel
+
 @{
+    ViewData["Title"] = "Detail";
 }
+
+<div>
+    <h2>Booking Details</h2>
+    <div>
+        <h4>Booking</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                Date
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Booking.Date.ToShortDateString()
+            </dd>
+        </dl>
+        <h5>Gebruiker</h5>
+        <table>
+            <thead>
+                <tr>
+                    <td>
+                        Username
+                    </td>
+                    <td>
+                        PhoneNumber
+                    </td>
+
+                </tr>
+            </thead>
+            @if (Model.Booking.User != null)
+            {
+                <tr>
+                    <td>@Model.Booking.User.Email</td>
+                    <td>@Model.Booking.User.PhoneNumber</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>@Model.Booking.Email</td>
+                    <td>@Model.Booking.PhoneNumber</td>
+                </tr>
+            }
+        </table>
+
+        <h5>Dieren</h5>
+        <div class="d-inline-flex flex-row justify-content-center flex-wrap">
+            @foreach (var animal in Model.Booking.Animals)
+            {
+                <div class="card m-2" style="width: 18rem;">
+                    <p><span>Naam: </span>@animal.Name</p>
+                    <img src="@animal.ImageUrl" />
+                    <p><span>Type: </span>@animal.AnimalType.Name</p>
+                    <p><span>Cost: </span>@animal.Cost</p>
+                </div>
+            }
+        </div>
+    </div>

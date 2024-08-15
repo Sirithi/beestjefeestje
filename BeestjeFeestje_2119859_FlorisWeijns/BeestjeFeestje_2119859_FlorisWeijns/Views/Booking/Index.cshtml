@@ -38,6 +38,9 @@
                                 <form asp-action="Delete" asp-route-id="@booking.Id">
                                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                 </form>
+                                <button>
+                                    <a asp-action="Detail" asp-route-id="@booking.Id" class="btn btn-sm">Detail</a>
+                                </button>
                             }
                             
                         </td>

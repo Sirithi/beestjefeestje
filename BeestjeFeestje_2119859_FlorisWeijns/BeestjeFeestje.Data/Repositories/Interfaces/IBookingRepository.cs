@@ -14,5 +14,6 @@ namespace BeestjeFeestje.Data.Repositories.Interfaces
         public Task<IEnumerable<Booking>> GetByUserWithRelations(User user);
         public Task<IEnumerable<Booking>> GetAllWithRelations();
         public Task<IEnumerable<Booking>> GetAllByFarmWithRelations(IEnumerable<string> ids);
+        public Task<Booking> GetWithRelations(string id);
     }
 }

@@ -34,5 +34,11 @@ namespace BeestjeFeestje.Data.Repositories
             var bookings = await GetQuery().Include(b => b.Animals).Include(b => b.User).Where(b => b.User == user).ToListAsync();
             return bookings;
         }
+
+        public async Task<Booking> GetWithRelations(string id)
+        {
+            var booking = await GetQuery().Include(b => b.Animals).Include(b => b.User).FirstOrDefaultAsync(b => b.Id == id);
+            return booking;
+        }
     }
 }

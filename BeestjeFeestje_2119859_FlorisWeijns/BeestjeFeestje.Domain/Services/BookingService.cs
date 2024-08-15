@@ -20,6 +20,7 @@ namespace BeestjeFeestje.Domain.Services
         private readonly IAnimalBookingRepository _animalBookingrepository;
         private readonly IUserRepository _userRepository;
         private readonly IFarmRepository _farmRepository;
+        private readonly IAnimalBookingRepository _animalBookingRepository;
         private readonly IMapper _mapper;
 
         public BookingService(
@@ -28,7 +29,8 @@ namespace BeestjeFeestje.Domain.Services
             IAnimalBookingRepository animalBookingrepository,
             IAnimalRepository animalRepository,
             IUserRepository userRepository,
-            IFarmRepository farmRepository)
+            IFarmRepository farmRepository,
+            IAnimalBookingRepository animalBookingRepository)
         {
             _bookingRepository = bookingRepository;
             _mapper = mapper;
@@ -36,6 +38,7 @@ namespace BeestjeFeestje.Domain.Services
             _animalRepository = animalRepository;
             _userRepository = userRepository;
             _farmRepository = farmRepository;
+            _animalBookingRepository = animalBookingRepository;
         }
 
         public Task<BookingModel> Add(BookingModel booking)
@@ -112,6 +115,15 @@ namespace BeestjeFeestje.Domain.Services
         {
             var bookings = await _bookingRepository.GetByUserWithRelations(_mapper.Map<User>(user));
             return _mapper.Map<IEnumerable<BookingModel>>(bookings);
+        }
+
+        public async Task<BookingModel> GetWithRelations(string id)
+        {
+            var booking = await _bookingRepository.GetWithRelations(id);
+            var animalBookings = await _animalBookingRepository.GetByBooking(booking);
+            var animals = await _animalRepository.GetAllByIdWithRelations(animalBookings.Select(a=> a.AnimalId));
+            booking.Animals = animals;
+            return _mapper.Map<BookingModel>(booking);
         }
 
         public async Task<BookingModel> Update(BookingModel booking)

@@ -19,5 +19,6 @@ namespace BeestjeFeestje.Domain.Services.Interfaces
         Task<IEnumerable<BookingModel>> GetByUser(UserModel user);
         Task<IEnumerable<BookingModel>> GetByUserWithRelations(UserModel user);
         Task<IEnumerable<BookingModel>> GetByOwnerWithRelations(UserModel user);
+        Task<BookingModel> GetWithRelations(string id);
     }
 }
