@@ -4,6 +4,7 @@
 
 <div class="d-inline-flex">
     <form asp-action="Confirm" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <input type="submit" class="btn btn-primary" value="Boek" />
     </form>

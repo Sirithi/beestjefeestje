@@ -10,9 +10,15 @@
 
 @if (User.IsInRole("Admin") || User.IsInRole("Owner"))
 {
-    <p>
-        <a asp-action="CreateRole" class="btn btn-primary">Create New Role</a>
-    </p>
+    <div class="d-flex">
+        <p>
+            <a asp-action="CreateRole" class="btn btn-primary">Create New Role</a>
+        </p>
+        <p>
+            <a asp-action="CreateUser" class="btn btn-primary">Create New User</a>
+        </p>
+    </div>
+    
 
     <table class="table">
         <thead>

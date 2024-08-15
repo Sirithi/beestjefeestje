@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Threading.Tasks;
 using BeestjeFeestje_2119859_FlorisWeijns.ViewModels;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using BeestjeFeestje.Data.Entities;
@@ -71,8 +67,8 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 
             var userRoles = await _userManager.GetRolesAsync(user);
 
-            var rolesToAdd = model.RolesToAdd[0]?.Split(',') ?? new string[] { };
-            var rolesToRemove = model.RolesToRemove[0]?.Split(',') ?? new string[] { };
+            var rolesToAdd = model.RolesToAdd[0]?.Split(',') ?? [];
+            var rolesToRemove = model.RolesToRemove[0]?.Split(',') ?? [];
 
             rolesToRemove = rolesToRemove.Intersect(userRoles).ToArray();
             rolesToAdd = rolesToAdd.Except(userRoles).ToArray();
@@ -95,6 +91,19 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             return View();
         }
 
+        public async Task<IActionResult> CreateUser()
+        {
+            var model = new CreateUserViewModel();
+            model.Id = Guid.NewGuid().ToString();
+            User? owner = (await _userManager.GetUserAsync(User));
+            if (owner == null)
+            {
+                return View(model);
+            }
+            model.FarmId = owner.FarmId;
+            return View(model);
+        }
+
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateRole(string roleName)
         {
@@ -107,6 +116,43 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 }
             }
             return RedirectToAction(nameof(Index));
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateUser(CreateUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var newUser = new User
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FarmId = model.FarmId,
+                    PhoneNumber = model.PhoneNumber,
+                    PostalCode = model.PostalCode,
+                    Address = model.Address,
+                };
+
+                var result = await _userManager.CreateAsync(newUser, model.Password);
+
+                if (result.Succeeded)
+                {
+                    IdentityResult roleResult = await _userManager.AddToRolesAsync(newUser, ["User"]);
+                    return RedirectToAction(nameof(ViewCredentials), model);
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+            }
+            return View(model);
+        }
+
+        public IActionResult ViewCredentials(CreateUserViewModel model)
+        {
+            return View(model);
         }
 
         private async Task<IEnumerable<User>> _getUsers(ClaimsPrincipal user)
