@@ -29,9 +29,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         public async Task<IActionResult> ManageRoles(string userId)
         {
             var targetUser = await _userManager.FindByIdAsync(userId);
-
-            
-
+            var currentUser = await _userManager.GetUserAsync(User);
             if (targetUser == null)
             {
                 return NotFound();
@@ -41,6 +39,11 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             var roleNames = allRoles.Select(r => r.Name);
 
             var userRoles = await _userManager.GetRolesAsync(targetUser);
+
+            if (!User.IsInRole("Admin"))
+            {
+                roleNames.Except(["Admin"]);
+            }
 
             var possibleRoles = roleNames.Except(userRoles);
 
