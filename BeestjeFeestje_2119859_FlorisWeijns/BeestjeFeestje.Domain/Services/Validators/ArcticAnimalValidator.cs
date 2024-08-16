@@ -14,8 +14,6 @@ namespace BeestjeFeestje.Domain.Services.Validators
             {
                 if (booking.Animals.Any(a => a.AnimalType.Name.ToLower() == "sneeuw"))
                 {
-                    //string code, string description = "", bool succeeded = false
-
                     string description = "Een woestijndier kan niet in de winter geboekt worden";
                     return new ValidationMessage(CODE, description, false);
                 }

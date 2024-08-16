@@ -11,7 +11,7 @@ namespace BeestjeFeestje.Domain.Services
 {
     public class BookingValidator : IBookingValidator
     {
-        ValidationMessage IBookingValidator.ValidateBooking(BookingModel booking)
+        Task<ValidationMessage> IBookingValidator.ValidateBooking(BookingModel booking)
         {
             throw new NotImplementedException();
         }

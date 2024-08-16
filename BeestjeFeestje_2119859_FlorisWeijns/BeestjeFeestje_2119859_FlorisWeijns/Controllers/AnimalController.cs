@@ -58,6 +58,10 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             };
 
             var userId = _userManager.GetUserId(User);
+            if(userId == null)
+            {
+                return RedirectToAction("Index");
+            }
             User? user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {

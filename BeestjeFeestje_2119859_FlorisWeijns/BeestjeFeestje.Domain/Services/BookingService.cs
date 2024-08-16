@@ -56,7 +56,7 @@ namespace BeestjeFeestje.Domain.Services
             var messages = new List<ValidationMessage>();
             foreach (var validator in _validators)
             {
-                var result = validator.ValidateBooking(booking);
+                var result = await validator.ValidateBooking(booking);
                 messages.Add(result);
 
                 if (!result.Succeeded)

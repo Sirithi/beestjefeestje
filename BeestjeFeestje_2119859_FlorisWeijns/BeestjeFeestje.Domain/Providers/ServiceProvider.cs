@@ -21,6 +21,7 @@ namespace BeestjeFeestje.Domain.Providers
             services.AddTransient<IBookingValidator, DesertAnimalValidator>();
             services.AddTransient<IBookingValidator, ArcticAnimalValidator>();
             services.AddTransient<IBookingValidator, AnimalAmountValidator>();
+            services.AddTransient<IBookingValidator, VipValidator>();
 
             return services;
         }

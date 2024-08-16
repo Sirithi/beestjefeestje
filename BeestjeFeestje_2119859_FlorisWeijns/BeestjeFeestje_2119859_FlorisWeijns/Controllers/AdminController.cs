@@ -47,7 +47,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 
             var possibleRoles = roleNames.Except(userRoles);
             
-            if(possibleRoles.Count() == 0)
+            if(possibleRoles == null)
             {
                 return RedirectToAction("Index");
             }
@@ -172,6 +172,10 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             }
 
             var adminUser = await _userManager.GetUserAsync(user);
+            if (adminUser == null)
+            {
+                throw new DataException("User not found");
+            }
             var users = await _userManager.Users.Where(u => u.FarmId == adminUser.FarmId).ToListAsync();
             return users;
         }
