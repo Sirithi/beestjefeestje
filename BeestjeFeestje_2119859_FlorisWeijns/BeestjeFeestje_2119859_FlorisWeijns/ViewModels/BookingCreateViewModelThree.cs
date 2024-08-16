@@ -1,6 +1,7 @@
 ﻿using BeestjeFeestje.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using BeestjeFeestje.Domain.Utils;
 using System.ComponentModel.DataAnnotations;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
@@ -15,10 +16,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
         {
             Id = modelOne.Id;
             Date = modelOne.Date;
-            SelectedAnimalNames = modelOne.SelectedAnimalNames;
-            Animals = modelOne.Animals;
-            SelectedAnimals = modelOne.SelectedAnimals;
-            AnimalList = modelOne.AnimalList;
             UserId = modelOne.UserId;
             Name = modelOne.Name;
             Email = modelOne.Email;
@@ -38,7 +35,8 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             IEnumerable<string> selectedAnimalNames, 
             IEnumerable<AnimalModel>? selectedAnimals, 
             IEnumerable<AnimalModel> animalList, 
-            string? userId)
+            string? userId,
+            IEnumerable<ValidationMessage> validationMessages)
         {
             Id = id;
             Name = name;

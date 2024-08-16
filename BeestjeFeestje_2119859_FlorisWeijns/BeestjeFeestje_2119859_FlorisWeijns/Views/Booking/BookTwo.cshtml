@@ -5,7 +5,7 @@
 <div class="d-inline-flex">
     <form asp-action="BookThree" method="post" >
         <div asp-validation-summary="All" class="text-danger"></div>
-        <input type="hidden" asp-for="Date" />
+        <input type="hidden" asp-for="Date" value="@Model.Date"/>
         <input type="hidden" asp-for="Animals"/>
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="UserId" />

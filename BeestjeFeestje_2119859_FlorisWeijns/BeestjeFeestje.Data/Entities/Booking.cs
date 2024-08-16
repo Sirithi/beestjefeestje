@@ -22,5 +22,6 @@ namespace BeestjeFeestje.Data.Entities
         public string? Address { get; set; }
         public string? PostalCode { get; set; }
         public bool IsConfirmed { get; set; }
+        public double Discount { get; set; }
     }
 }

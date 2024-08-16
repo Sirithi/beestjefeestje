@@ -30,11 +30,7 @@ namespace BeestjeFeestje.Data.Repositories
         public async Task<Animal> GetByName(string name)
         {
             var result = await GetQuery().Where(a => a.Name == name).FirstOrDefaultAsync();
-            if (result == null)
-            {
-                throw new KeyNotFoundException();
-            }
-            return result;
+            return result ?? throw new KeyNotFoundException();
         }
 
         public async Task<IEnumerable<Animal>> GetByNames(IEnumerable<string> names)
@@ -45,11 +41,13 @@ namespace BeestjeFeestje.Data.Repositories
         public async Task<Animal> GetWithRelations(string id)
         {
             var animal = await GetQuery().Include(a => a.AnimalType).Where(a => a.Id == id).FirstOrDefaultAsync();
-            if (animal == null)
-            {
-                throw new KeyNotFoundException();
-            }
-            return animal;
+            return animal ?? throw new KeyNotFoundException();
+        }
+
+        public async Task<IEnumerable<Animal>> GetByNamesWithRelations(IEnumerable<string> names)
+        {
+            var result = await GetQuery().Include(a => a.AnimalType).Where(a => names.Contains(a.Name)).ToListAsync();
+            return result;
         }
     }
 }

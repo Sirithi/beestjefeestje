@@ -2,6 +2,7 @@
 using BeestjeFeestje.Data.Entities;
 using BeestjeFeestje.Domain.Models;
 using BeestjeFeestje.Domain.Services.Interfaces;
+using BeestjeFeestje.Domain.Utils;
 using BeestjeFeestje_2119859_FlorisWeijns.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -54,11 +55,20 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             {
                 model.UserId = user.Id;
             }
-            model.Date = DateTime.Now;
+            model.Date = DateTime.Now.Date;
             model.Id = Guid.NewGuid().ToString();
             return View(model);
         }
 
+        public async Task<IActionResult> BookTwoGet(BookingCreateViewModelTwo modelTwo)
+        {
+            modelTwo.AnimalList ??= await _animalService.GetAll();
+            modelTwo.Animals ??= new MultiSelectList(
+                modelTwo.AnimalList.Select(e => e.Name),
+                modelTwo.SelectedAnimalNames);
+
+            return View("BookTwo", modelTwo);
+        }
 
         [HttpPost]
         public async Task<IActionResult> BookTwo(BookingCreateViewModelOne modelOne)
@@ -81,20 +91,15 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var modelOne = new BookingCreateViewModelOne(modelTwo);
-                return RedirectToAction("BookTwo", modelOne);
+                return RedirectToAction("BookTwoGet", modelTwo);
             }
 
-            if(modelTwo.SelectedAnimalNames == null)
+            BookingCreateViewModelThree model = new(modelTwo)
             {
-                ModelState.AddModelError("SelectedAnimalNames", "Please select at least one animal");
-                return RedirectToAction("BookTwo", modelTwo);
-            }
+                SelectedAnimals = await _animalService.GetByNamesWithRelations(modelTwo.SelectedAnimalNames)
+            };
 
-            BookingCreateViewModelThree model = new(modelTwo);
-            model.SelectedAnimals = await _animalService.GetByNames(modelTwo.SelectedAnimalNames);
-
-            User? user = new();
+            User? user;
 
             if (model.UserId != null)
             {
@@ -116,9 +121,24 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 Address = model.Address,
                 PostalCode = model.PostalCode
             };
+            try
+            {
+                await _bookingService.AddPlaceholder(booking);
+            }
+            catch (ValidationException error)
+            {
+                IEnumerable<ValidationMessage> errors = [];
+                foreach (var e in error.ValidationResults)
+                {
+                    if(e.Succeeded)
+                    {
+                        continue;
+                    }
+                    ModelState.AddModelError(e.Code, e.Description);
+                }
+                return RedirectToAction("BookTwoGet", modelTwo);
+            }
 
-            await _bookingService.AddPlaceholder(booking);
-            
             return View(model);
         }
 

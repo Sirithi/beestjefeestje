@@ -42,18 +42,22 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 
             if (!User.IsInRole("Admin"))
             {
-                roleNames.Except(["Admin"]);
+                roleNames = roleNames.Except(["Admin"]);
             }
 
             var possibleRoles = roleNames.Except(userRoles);
-
+            
+            if(possibleRoles.Count() == 0)
+            {
+                return RedirectToAction("Index");
+            }
             var model = new ManageRolesViewModel
             {
                 AvailableRoles = possibleRoles.ToList(),
                 UserId = userId,
-                AssignedRoles = userRoles.ToList(),
-                RolesToAdd = new List<string>(),
-                RolesToRemove = new List<string>()
+                AssignedRoles = [.. userRoles],
+                RolesToAdd = [],
+                RolesToRemove = []
             };
 
             return View(model);
@@ -76,12 +80,12 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             rolesToRemove = rolesToRemove.Intersect(userRoles).ToArray();
             rolesToAdd = rolesToAdd.Except(userRoles).ToArray();
 
-            if (rolesToAdd.Any())
+            if (rolesToAdd.Length != 0)
             {
                 IdentityResult result = await _userManager.AddToRolesAsync(user, rolesToAdd);
             }
 
-            if (rolesToRemove.Any())
+            if (rolesToRemove.Length != 0)
             {
                 IdentityResult result = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
             }
@@ -96,8 +100,10 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 
         public async Task<IActionResult> CreateUser()
         {
-            var model = new CreateUserViewModel();
-            model.Id = Guid.NewGuid().ToString();
+            var model = new CreateUserViewModel
+            {
+                Id = Guid.NewGuid().ToString()
+            };
             User? owner = (await _userManager.GetUserAsync(User));
             if (owner == null)
             {

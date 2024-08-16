@@ -9,7 +9,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
     {
         public BookingCreateViewModelOne()
         {
-            SelectedAnimalNames = new List<string>();
         }
 
         public BookingCreateViewModelOne(BookingCreateViewModelTwo modelTwo)
@@ -21,10 +20,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             Address = modelTwo.Address;
             PostalCode = modelTwo.PostalCode;
             Date = modelTwo.Date;
-            SelectedAnimalNames = modelTwo.SelectedAnimalNames;
-            Animals = modelTwo.Animals;
-            SelectedAnimals = modelTwo.SelectedAnimals;
-            AnimalList = modelTwo.AnimalList;
             UserId = modelTwo.UserId;
         }
 
@@ -36,11 +31,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
         public string? PostalCode { get; set; }
         [Required]
         public DateTime Date { get; set; }
-        public MultiSelectList? Animals { get; set; }
-
-        public IEnumerable<string> SelectedAnimalNames { get; set; }
-        public IEnumerable<AnimalModel>? SelectedAnimals { get; set; }
-        public IEnumerable<AnimalModel>? AnimalList { get; set; }
         public string? UserId { get; set; }
     }
 }

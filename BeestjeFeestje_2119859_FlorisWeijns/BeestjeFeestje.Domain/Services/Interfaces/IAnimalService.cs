@@ -15,6 +15,7 @@ namespace BeestjeFeestje.Domain.Services.Interfaces
         Task<bool> Delete(string id);
         Task<AnimalModel> Update(AnimalModel animal);
         Task<IEnumerable<AnimalModel>> GetByNames(IEnumerable<string> names);
+        Task<IEnumerable<AnimalModel>> GetByNamesWithRelations(IEnumerable<string> names);
         Task<AnimalModel> GetByName(string name);
     }
 }

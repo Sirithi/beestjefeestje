@@ -83,6 +83,12 @@ namespace BeestjeFeestje.Domain.Services
             return _mapper.Map<IEnumerable<AnimalModel>>(result);
         }
 
+        public async Task<IEnumerable<AnimalModel>> GetByNamesWithRelations(IEnumerable<string> names)
+        {
+            var result = await _animalRepostiory.GetByNamesWithRelations(names);
+            return _mapper.Map<IEnumerable<AnimalModel>>(result);
+        }
+
         public async Task<AnimalModel> Update(AnimalModel animal)
         {
             var animalEntity = await _animalRepostiory.GetWithRelations(animal.Id);
