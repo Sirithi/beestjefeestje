@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 {
-    [Authorize(Roles = "Owner")]
+    [Authorize(Roles = "Owner,Admin")]
     public class AnimalController(IAnimalService animalService, IAnimalTypeService animalTypeService, UserManager<User> userManager) : Controller
     {
         private readonly IAnimalService _animalService = animalService;
