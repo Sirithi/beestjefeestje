@@ -21,6 +21,8 @@ namespace BeestjeFeestje.Test.UnitTests.Utils
 
         public static Mock<IUserRepository> GetUserRepository() => new();
 
+        public static Mock<UserManager<User>> GetUserManager() => new();
+
         public static IMapper GetAutoMapper()
         {
             return new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile())));

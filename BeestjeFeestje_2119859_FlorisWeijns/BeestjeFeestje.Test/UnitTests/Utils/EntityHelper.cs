@@ -9,9 +9,9 @@ namespace BeestjeFeestje.Test.UnitTests.Utils
 {
     internal static class EntityHelper
     {
-        public static BeestjeFeestje.Data.Entities.Animal CreateAnimal(string id)
+        public static Animal CreateAnimal(string id)
         {
-            return new BeestjeFeestje.Data.Entities.Animal
+            return new Animal
             {
                 Id = id,
                 Name = "TestAnimal",
@@ -20,6 +20,29 @@ namespace BeestjeFeestje.Test.UnitTests.Utils
                 Description = "Test Description",
                 AnimalType = new AType() { Id="1", Name="Sneeuw"},
                 FarmId = "1"
+            };
+        }
+
+        public static User CreateUser(string id, string email)
+        {
+            return new User
+            {
+                Id = id,
+                UserName = "TestUser",
+                Email = email
+            };
+        }
+
+        public static Booking CreateBooking(string id, User user, IList<Animal> animals)
+        {
+            return new Booking
+            {
+                Id = id,
+                Date = DateTime.Now,
+                Animals = animals,
+                User = user,
+                Name = "TestName",
+                Email = ""
             };
         }
     }
