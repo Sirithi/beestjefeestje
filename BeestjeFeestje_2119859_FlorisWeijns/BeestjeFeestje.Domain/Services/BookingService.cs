@@ -19,7 +19,6 @@ namespace BeestjeFeestje.Domain.Services
         private readonly UserManager<User> _userManager;
         private readonly IBookingRepository _bookingRepository;
         private readonly IAnimalRepository _animalRepository;
-        private readonly IAnimalBookingRepository _animalBookingrepository;
         private readonly IUserRepository _userRepository;
         private readonly IAnimalBookingRepository _animalBookingRepository;
         private readonly IMapper _mapper;
@@ -29,7 +28,6 @@ namespace BeestjeFeestje.Domain.Services
             UserManager<User> userManager,
             IBookingRepository bookingRepository,
             IMapper mapper,
-            IAnimalBookingRepository animalBookingrepository,
             IAnimalRepository animalRepository,
             IUserRepository userRepository,
             IAnimalBookingRepository animalBookingRepository,
@@ -38,7 +36,6 @@ namespace BeestjeFeestje.Domain.Services
         {
             _bookingRepository = bookingRepository;
             _mapper = mapper;
-            _animalBookingrepository = animalBookingrepository;
             _animalRepository = animalRepository;
             _userRepository = userRepository;
             _animalBookingRepository = animalBookingRepository;
@@ -92,7 +89,7 @@ namespace BeestjeFeestje.Domain.Services
                     AnimalId = animal.Id,
                     BookingId = booking.Id
                 };
-                await _animalBookingrepository.Add(animalBooking);
+                await _animalBookingRepository.Add(animalBooking);
             }
 
             var result = await _bookingRepository.Add(_mapper.Map<Booking>(booking));

@@ -10,6 +10,11 @@ namespace BeestjeFeestje.Domain.Services.Validators
     {
         private static readonly string CODE = "BookingAnimalCount";
         private readonly UserManager<User> _userManager;
+
+        public AnimalAmountValidator()
+        {
+        }
+
         public AnimalAmountValidator(UserManager<User> userManager)
         {
             _userManager = userManager;

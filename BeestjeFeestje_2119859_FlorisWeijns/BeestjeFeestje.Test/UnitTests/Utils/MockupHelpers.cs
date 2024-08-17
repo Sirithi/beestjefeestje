@@ -1,23 +1,25 @@
 ﻿using AutoMapper;
+using BeestjeFeestje.Data.Entities;
 using BeestjeFeestje.Data.Repositories.Interfaces;
 using BeestjeFeestje.Domain.Models.Map;
-using BeestjeFeestje.Domain.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BeestjeFeestje.Test.UnitTests.Utils
 {
     internal static class MockupHelpers
     {
-        public static Mock<IATypeRepository> GetATypeRepository() => new Mock<IATypeRepository>();
+        public static Mock<IATypeRepository> GetATypeRepository() => new();
         
-        public static Mock<IAnimalRepository> GetAnimalRepository() => new Mock<IAnimalRepository>();
+        public static Mock<IAnimalRepository> GetAnimalRepository() => new();
 
-        public static Mock<IFarmRepository> GetFarmRepository() => new Mock<IFarmRepository>();
+        public static Mock<IFarmRepository> GetFarmRepository() => new();
+
+        public static Mock<IBookingRepository> GetBookingRepository() => new();
+
+        public static Mock<IAnimalBookingRepository> GetAnimalBookingRepository() => new();
+
+        public static Mock<IUserRepository> GetUserRepository() => new();
 
         public static IMapper GetAutoMapper()
         {

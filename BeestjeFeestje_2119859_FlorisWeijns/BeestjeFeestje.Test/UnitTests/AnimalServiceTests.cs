@@ -18,8 +18,6 @@ namespace BeestjeFeestje.Test.UnitTests
             var animalRepo = MockupHelpers.GetAnimalRepository();
             var mapper = MockupHelpers.GetAutoMapper();
 
-            
-
             animalRepo.Setup(a => a.Get(It.IsAny<string>())).Returns((string x) => ValueTask.FromResult(EntityHelper.CreateAnimal("1")));
 
             _animalService = new AnimalService(animalRepo.Object, aTypeRepo.Object, farmRepo.Object, mapper);
