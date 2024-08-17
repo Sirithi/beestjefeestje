@@ -8,6 +8,10 @@
         <input type="hidden" asp-for="Id" />
         <input type="submit" class="btn btn-primary" value="Boek" />
     </form>
+    <form asp-action="Cancel" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <input type="submit" class="btn btn-danger" value="Cancel" />
+    </form>
 
     <div>
         <h3>Boeking Info</h3>

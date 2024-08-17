@@ -180,5 +180,11 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             price = Math.Round((cost * (1-(booking.Discount/100))), 2);
             return View(new BookingDetailViewModel(booking, cost, price));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Cancel()
+        {
+            return RedirectToAction("Index");
+        }
     }
 }
