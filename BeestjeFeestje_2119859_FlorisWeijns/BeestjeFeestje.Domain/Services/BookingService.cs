@@ -202,7 +202,7 @@ namespace BeestjeFeestje.Domain.Services
         public async Task<IEnumerable<BookingModel>> GetByUserWithRelations(UserModel user)
         {
             var bookings = await _bookingRepository.GetByUserWithRelations(_mapper.Map<User>(user));
-            return _mapper.Map<IEnumerable<BookingModel>>(bookings);
+            return _mapper.Map<IEnumerable<BookingModel>>(bookings.Where(booking => booking.IsConfirmed));
         }
 
         public async Task<BookingModel> GetWithRelations(string id)
