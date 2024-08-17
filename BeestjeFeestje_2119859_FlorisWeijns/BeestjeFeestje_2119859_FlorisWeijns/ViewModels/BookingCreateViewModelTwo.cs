@@ -1,6 +1,4 @@
 ﻿using BeestjeFeestje.Domain.Models;
-using BeestjeFeestje.Domain.Utils;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
@@ -19,7 +17,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             Date = modelTwo.Date;
             SelectedAnimalNames = modelTwo.SelectedAnimalNames;
             Animals = modelTwo.Animals;
-            SelectedAnimalNames = modelTwo.SelectedAnimalNames;
             SelectedAnimals = modelTwo.SelectedAnimals;
             AnimalList = modelTwo.AnimalList;
             UserId = modelTwo.UserId;
@@ -29,7 +26,6 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             Address = modelTwo.Address;
             PostalCode = modelTwo.PostalCode;
         }
-
 
         public string Id { get; set; }
         public string? Name { get; set; }
@@ -45,5 +41,8 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
         public IEnumerable<AnimalModel>? SelectedAnimals { get; set; }
         public IEnumerable<AnimalModel>? AnimalList { get; set; }
         public string? UserId { get; set; }
+        public double Cost { get; set; }
+        public BookingModel Booking { get; set; }
+        public double Price { get { return Math.Round(Cost * ((100 - Booking.Discount) / 100), 2); }}
     }
 }

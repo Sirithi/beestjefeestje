@@ -123,7 +123,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             };
             try
             {
-                await _bookingService.AddPlaceholder(booking);
+                booking = await _bookingService.AddPlaceholder(booking);
             }
             catch (ValidationException error)
             {
@@ -139,6 +139,8 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 return RedirectToAction("BookTwoGet", modelTwo);
             }
 
+            model.Cost = model.SelectedAnimals.Sum(e => e.Cost);
+            model.Booking = await _bookingService.GetWithRelations(booking.Id);
             return View(model);
         }
 
@@ -162,7 +164,21 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         public async Task<IActionResult> Detail(string id)
         {
             var booking = await _bookingService.GetWithRelations(id);
-            return View(new BookingDetailViewModel(booking));
+            double cost;
+            double price;
+
+            if (booking.Animals != null)
+            {
+                cost = booking.Animals.Sum(e => e.Cost);
+            }
+            else
+            {
+                cost = 0;
+                price = 0;
+            }
+
+            price = Math.Round((cost * (1-(booking.Discount/100))), 2);
+            return View(new BookingDetailViewModel(booking, cost, price));
         }
     }
 }

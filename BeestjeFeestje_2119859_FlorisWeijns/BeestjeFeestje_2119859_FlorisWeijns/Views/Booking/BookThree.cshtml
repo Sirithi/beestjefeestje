@@ -23,6 +23,26 @@
                 </div>
             }
         </div>
+        <table>
+            <thead>
+                <tr>
+                    <td>
+                        Totaal
+                    </td>
+                    <td>
+                        Korting
+                    </td>
+                    <td>
+                        Prijs
+                    </td>
+                </tr>
+            </thead>
+            <tr>
+                <td>@Model.Cost</td>
+                <td>@Model.Booking.Discount %</td>
+                <td>@Model.Price</td>
+            </tr>
+        </table>
     </div>
 </div>
 
