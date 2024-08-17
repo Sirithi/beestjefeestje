@@ -104,5 +104,11 @@ namespace BeestjeFeestje.Domain.Services
             var updated_animal = await _animalRepostiory.GetWithRelations(animal.Id);
             return _mapper.Map<AnimalModel>(updated_animal);
         }
+
+        public async Task<IEnumerable<AnimalModel>> GetByFarmWithRelations(string farmId)
+        {
+            var result = await _animalRepostiory.GetByFarmWithRelations(farmId);
+            return _mapper.Map<IEnumerable<AnimalModel>>(result);
+        }
     }
 }

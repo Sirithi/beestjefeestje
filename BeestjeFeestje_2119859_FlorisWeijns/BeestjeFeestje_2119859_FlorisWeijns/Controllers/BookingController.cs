@@ -27,6 +27,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 
         public async Task<IActionResult> Index()
         {
+            User user = await _userManager.GetUserAsync(User);
             if(User.IsInRole("Admin"))
             {
                 var content = new BookingIndexViewModel(await _bookingService.GetAllWithRelations());
@@ -34,14 +35,12 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
             }
             if(User.IsInRole("User"))
             {
-                var user = await _userManager.GetUserAsync(User);
-                var userContent = new BookingIndexViewModel(await _bookingService.GetByUserWithRelations(_mapper.Map<UserModel>(user)));
+                var userContent = new BookingIndexViewModel(await _bookingService.GetByUserWithRelations(_mapper.Map<UserModel>(user)), user);
                 return View(userContent);
             }
             if(User.IsInRole("Owner"))
             {
-                var user = await _userManager.GetUserAsync(User);
-                var userContent = new BookingIndexViewModel(await _bookingService.GetByOwnerWithRelations(_mapper.Map<UserModel>(user)));
+                var userContent = new BookingIndexViewModel(await _bookingService.GetByOwnerWithRelations(_mapper.Map<UserModel>(user)), user);
                 return View(userContent);
             }
             return View(new BookingIndexViewModel());
@@ -62,6 +61,15 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
 
         public async Task<IActionResult> BookTwoGet(BookingCreateViewModelTwo modelTwo)
         {
+            if(User.IsInRole("User"))
+            {
+                var user = await _userManager.GetUserAsync(User);
+                modelTwo.AnimalList ??= await _animalService.GetByFarmWithRelations(user.FarmId);
+                modelTwo.Animals ??= new MultiSelectList(
+                    modelTwo.AnimalList.Select(e => e.Name),
+                    modelTwo.SelectedAnimalNames);
+                return View("BookTwo", modelTwo);
+            }
             modelTwo.AnimalList ??= await _animalService.GetAll();
             modelTwo.Animals ??= new MultiSelectList(
                 modelTwo.AnimalList.Select(e => e.Name),
@@ -78,6 +86,17 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 return RedirectToAction("Book", modelOne);
             }
             var model = new BookingCreateViewModelTwo(modelOne);
+
+            if (User.IsInRole("User"))
+            {
+                var user = await _userManager.GetUserAsync(User);
+                model.AnimalList ??= await _animalService.GetByFarmWithRelations(user.FarmId);
+                model.Animals ??= new MultiSelectList(
+                    model.AnimalList.Select(e => e.Name),
+                    model.SelectedAnimalNames);
+                return View(model);
+            }
+            
             model.AnimalList ??= await _animalService.GetAll();
             model.Animals ??= new MultiSelectList(
                 model.AnimalList.Select(e => e.Name),

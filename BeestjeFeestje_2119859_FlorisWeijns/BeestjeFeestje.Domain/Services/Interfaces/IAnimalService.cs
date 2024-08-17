@@ -17,5 +17,6 @@ namespace BeestjeFeestje.Domain.Services.Interfaces
         Task<IEnumerable<AnimalModel>> GetByNames(IEnumerable<string> names);
         Task<IEnumerable<AnimalModel>> GetByNamesWithRelations(IEnumerable<string> names);
         Task<AnimalModel> GetByName(string name);
+        Task<IEnumerable<AnimalModel>> GetByFarmWithRelations(string farmId);
     }
 }
