@@ -32,7 +32,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             ATypesList = new SelectList(aTypes, "Id", "Name");
         }
 
-        public AnimalUpdateViewModel(string id, string name, string animalName, double cost, string description, string farmId, IEnumerable<ATypeModel> aTypesList, string selectedAnimalType)
+        public AnimalUpdateViewModel(string id, string name, string animalName, double cost, string description, string farmId, IEnumerable<ATypeModel> aTypesList, string selectedAnimalType, string imageUrl)
         {
             Id = id;
             Name = name;
@@ -42,6 +42,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             FarmId = farmId;
             ATypesList = new SelectList(aTypesList, "Id", "Name");
             SelectedAnimalType = selectedAnimalType;
+            ImageUrl = imageUrl;
         }
 
         public AnimalUpdateViewModel(AnimalModel animal, IEnumerable<ATypeModel> aTypes)
@@ -54,6 +55,7 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.ViewModels
             FarmId = animal.FarmId;
             ATypesList = new SelectList(aTypes, "Id", "Name");
             SelectedAnimalType = animal.AnimalType.Id;
+            ImageUrl = animal.ImageUrl;
         }
     }
 }
