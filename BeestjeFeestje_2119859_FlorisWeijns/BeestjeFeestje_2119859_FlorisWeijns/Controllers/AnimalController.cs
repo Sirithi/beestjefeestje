@@ -21,8 +21,17 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
         public async Task<IActionResult> Index()
         {
             var animals = await _animalService.GetAll();
-            
-            var viewModel = new AnimalIndexViewModel(animals);
+            var user = await _userManager.GetUserAsync(User);
+            if(user == null)
+            {
+                return RedirectToPage("/Home/Index", new { area = "Identity" });
+            }
+            if(User.IsInRole("Admin"))
+            {
+                var adminAnimals = new AnimalIndexViewModel(animals);
+                return View(adminAnimals);
+            }
+            var viewModel = new AnimalIndexViewModel(animals.Where(animal => animal.FarmId == user.FarmId));
 
             return View(viewModel);
         }
