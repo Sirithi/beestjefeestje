@@ -118,7 +118,8 @@ namespace BeestjeFeestje_2119859_FlorisWeijns.Controllers
                 Cost = model.Cost,
                 Description = model.Description,
                 AnimalType = animalType,
-                FarmId = model.FarmId
+                FarmId = model.FarmId,
+                ImageUrl = model.ImageUrl
             };
 
             await _animalService.Update(animal);
